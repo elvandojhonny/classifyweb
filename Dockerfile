@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -6,14 +6,13 @@ RUN apt-get update && apt-get install -y \
     curl \
     zip \
     libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
     libonig-dev \
-    libxml2-dev
+    libxml2-dev \
+    default-mysql-client
 
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-install pdo pdo_mysql mbstring bcmath
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
