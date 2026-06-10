@@ -35,6 +35,10 @@ Route::get('/', function () {
 Route::post('/support/send', [SupportController::class, 'send'])
     ->name('support.send');
 
+Route::middleware(['auth'])->get('/tes-login', function () {
+    return 'LOGIN OK';
+});
+
 /*
 |--------------------------------------------------------------------------
 | DASHBOARD REDIRECT
