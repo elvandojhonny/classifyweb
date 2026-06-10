@@ -1,25 +1,189 @@
 @extends('layouts.admin')
 
-@section('navbar','Pengumuman')
+@section('title', 'Pengumuman')
+
+@section('page-title', 'Pengumuman')
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<style>
+
+    .page-header{
+        margin-bottom: 30px;
+    }
+
+    .page-title{
+        font-size: 30px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+
+    .page-subtitle{
+        color: #64748b;
+    }
+
+    .btn-modern{
+        border: none;
+        border-radius: 16px;
+        padding: 14px 22px;
+        font-weight: 600;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-primary-modern{
+        background: #4f46e5;
+        color: white;
+    }
+
+    .btn-primary-modern:hover{
+        background: #4338ca;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* =========================
+        CARD
+    ========================== */
+
+    .announcement-card{
+        background: white;
+        border-radius: 26px;
+        padding: 26px;
+        height: 100%;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: 0.3s;
+    }
+
+    .announcement-card:hover{
+        transform: translateY(-5px);
+        box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+    }
+
+    .announcement-title{
+        font-size: 22px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
+    }
+
+    .announcement-date{
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+    .announcement-content{
+        margin-top: 20px;
+        color: #475569;
+        line-height: 1.8;
+        min-height: 90px;
+    }
+
+    /* =========================
+        BADGE
+    ========================== */
+
+    .badge-modern{
+        padding: 8px 14px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-active{
+        background: rgba(34,197,94,0.12);
+        color: #16a34a;
+    }
+
+    .badge-inactive{
+        background: rgba(148,163,184,0.15);
+        color: #64748b;
+    }
+
+    /* =========================
+        BUTTON ACTION
+    ========================== */
+
+    .btn-action{
+        border: none;
+        border-radius: 14px;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .btn-edit{
+        background: rgba(245,158,11,0.14);
+        color: #d97706;
+    }
+
+    .btn-edit:hover{
+        background: rgba(245,158,11,0.22);
+    }
+
+    .btn-delete{
+        background: rgba(239,68,68,0.12);
+        color: #dc2626;
+    }
+
+    .btn-delete:hover{
+        background: rgba(239,68,68,0.2);
+    }
+
+    /* =========================
+        EMPTY
+    ========================== */
+
+    .empty-card{
+        background: white;
+        border-radius: 28px;
+        padding: 70px 20px;
+        text-align: center;
+        border: 1px dashed #cbd5e1;
+    }
+
+    .empty-icon{
+        font-size: 60px;
+        color: #cbd5e1;
+        margin-bottom: 20px;
+    }
+
+    .empty-title{
+        font-size: 24px;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .empty-subtitle{
+        color: #94a3b8;
+        margin-top: 8px;
+    }
+
+</style>
+
+<!-- =========================
+    HEADER
+========================== -->
+
+<div class="d-flex justify-content-between align-items-center page-header">
 
     <div>
 
-        <h4 class="fw-bold mb-1">
+        <div class="page-title">
             Pengumuman Sistem
-        </h4>
+        </div>
 
-        <small class="text-muted">
-            Kelola informasi untuk dashboard user
-        </small>
+        <div class="page-subtitle">
+            Kelola informasi dan pemberitahuan untuk pengguna sistem
+        </div>
 
     </div>
 
     <a href="{{ route('pengumuman.create') }}"
-       class="btn btn-primary">
+       class="btn-modern btn-primary-modern">
 
         + Tambah Pengumuman
 
@@ -27,54 +191,69 @@
 
 </div>
 
+<!-- =========================
+    CONTENT
+========================== -->
+
 <div class="row">
 
     @forelse($pengumuman as $item)
 
         <div class="col-md-6 mb-4">
 
-            <div class="card-modern">
+            <div class="announcement-card">
 
-                <div class="d-flex justify-content-between align-items-start mb-3">
+                <!-- TOP -->
+                <div class="d-flex justify-content-between align-items-start">
 
                     <div>
 
-                        <h5 class="fw-bold mb-1">
-                            {{ $item->judul }}
-                        </h5>
+                        <div class="announcement-title">
 
-                        <small class="text-muted">
+                            {{ $item->judul }}
+
+                        </div>
+
+                        <div class="announcement-date">
+
                             {{ $item->created_at->format('d M Y') }}
-                        </small>
+
+                        </div>
 
                     </div>
 
                     @if($item->aktif)
 
-                        <span class="badge bg-success">
+                        <span class="badge-modern badge-active">
+
                             Aktif
+
                         </span>
 
                     @else
 
-                        <span class="badge bg-secondary">
+                        <span class="badge-modern badge-inactive">
+
                             Nonaktif
+
                         </span>
 
                     @endif
 
                 </div>
 
-                <p class="text-muted">
+                <!-- CONTENT -->
+                <div class="announcement-content">
 
                     {{ $item->isi }}
 
-                </p>
+                </div>
 
-                <div class="d-flex gap-2 mt-3">
+                <!-- ACTION -->
+                <div class="d-flex gap-3 mt-4">
 
                     <a href="{{ route('pengumuman.edit',$item->id) }}"
-                       class="btn btn-warning btn-sm">
+                       class="btn-action btn-edit text-decoration-none">
 
                         Edit
 
@@ -86,8 +265,8 @@
                         @csrf
                         @method('DELETE')
 
-                        <button class="btn btn-danger btn-sm"
-                                onclick="return confirm('Hapus pengumuman?')">
+                        <button class="btn-action btn-delete"
+                                onclick="return confirm('Hapus pengumuman ini?')">
 
                             Hapus
 
@@ -105,9 +284,19 @@
 
         <div class="col-12">
 
-            <div class="card-modern text-center text-muted py-5">
+            <div class="empty-card">
 
-                Belum ada pengumuman
+                <div class="empty-icon">
+                    <i class="bi bi-megaphone"></i>
+                </div>
+
+                <div class="empty-title">
+                    Belum Ada Pengumuman
+                </div>
+
+                <div class="empty-subtitle">
+                    Tambahkan pengumuman baru untuk ditampilkan kepada user
+                </div>
 
             </div>
 

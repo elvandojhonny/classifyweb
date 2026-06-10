@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah User')
+@section('title', 'Tambah Akun')
 
-@section('page-title', 'Tambah User')
+@section('page-title', 'Tambah Akun')
 
 @section('content')
 
@@ -76,7 +76,7 @@
             <!-- HEADER -->
             <div class="form-header">
 
-                <h4>Tambah User</h4>
+                <h4>Tambah Akun</h4>
 
                 <p>
                     Tambahkan akun pengguna baru ke dalam sistem
@@ -167,11 +167,37 @@
 
                     </div>
 
+                    <div class="col-md-6 mb-4">
+
+    <label class="form-label">
+        Fakultas
+    </label>
+
+    <select name="fakultas_id"
+            class="form-select"
+            required>
+
+        <option value="">
+            -- Pilih Fakultas --
+        </option>
+
+        @foreach($fakultas as $f)
+
+            <option value="{{ $f->id }}">
+                {{ $f->nama_fakultas }}
+            </option>
+
+        @endforeach
+
+    </select>
+
+</div>
+
                     <!-- ROLE -->
                     <div class="col-md-6 mb-4">
 
                         <label class="form-label">
-                            Role User
+                            Role Akun
                         </label>
 
                         <select name="role"
@@ -187,8 +213,14 @@
                             </option>
 
                             <option value="admin">
-                                Admin
+                                Admin Fakultas
                             </option>
+
+                            @if(auth()->user()->role == 'superadmin')
+                                <option value="superadmin">
+                                    Super Admin
+                                </option>
+                            @endif
 
                         </select>
 
@@ -200,7 +232,7 @@
                 <button type="submit"
                         class="submit-btn">
 
-                    Simpan User
+                    Simpan Akun
 
                 </button>
 

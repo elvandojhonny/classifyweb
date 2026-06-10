@@ -22,25 +22,26 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+   public function store(LoginRequest $request): RedirectResponse
 {
     $request->authenticate();
 
     $request->session()->regenerate();
 
-    $role = trim(auth()->user()->role);
+    return match(auth()->user()->role) {
 
-    if ($role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    }
+        'superadmin',
+        'admin'
+            => redirect()->route('admin.dashboard'),
 
-    if ($role === 'user') {
-        return redirect()->route('user.dashboard');
-    }
+        'user'
+            => redirect()->route('user.dashboard'),
 
-    Auth::logout();
-
-    abort(403, 'Role tidak valid');
+        default => tap(
+            Auth::logout(),
+            fn() => abort(403, 'Role tidak valid')
+        ),
+    };
 }
 
     /**

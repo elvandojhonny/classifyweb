@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Data User')
+@section('title', 'Akun')
 
-@section('page-title', 'Data User')
+@section('page-title', 'Akun')
 
 @section('content')
 
@@ -194,7 +194,7 @@
 
     <div>
 
-        <h4>Data User</h4>
+        <h4>Data Akun</h4>
 
         <p>
             Kelola akun pengguna sistem
@@ -206,7 +206,7 @@
        class="btn-add">
 
         <i class="bi bi-plus-lg"></i>
-        Tambah User
+        Tambah Akun
 
     </a>
 
@@ -310,11 +310,11 @@
         <div class="empty-card">
 
             <h5 class="mb-2">
-                Data User Kosong
+                Data Akun Kosong
             </h5>
 
             <p class="text-muted mb-0">
-                Belum ada user yang terdaftar
+                Belum ada akun yang terdaftar
             </p>
 
         </div>

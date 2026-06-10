@@ -9,47 +9,63 @@ class SupportController extends Controller
 {
     public function send(Request $request)
     {
-        try{
+        $request->validate([
 
-            $pesan =
-"📢 LAPORAN SISTEM PEMINJAMAN
+            'nama' => 'required',
+            'nomor' => 'required',
+            'kategori' => 'required',
+            'pesan' => 'required',
 
-👤 Nama: {$request->nama}
+        ]);
 
-📧 Email: {$request->email}
+        $admin = env('FONNTE_ADMIN');
 
-📱 HP: {$request->hp}
+        $message = "
 
-📌 Kategori:
-{$request->kategori}
+📢 *LAPORAN KENDALA SISTEM*
 
-⚠ Prioritas:
-{$request->prioritas}
+👤 Nama : {$request->nama}
+📱 Nomor : {$request->nomor}
+📌 Kategori : {$request->kategori}
 
-📝 Detail:
-{$request->detail}";
+📝 Detail Kendala:
+{$request->pesan}
 
-            $response = Http::withoutVerifying()
-    ->asForm()
-                ->withHeaders([
-                    'Authorization' => env('FONNTE_TOKEN')
-                ])
-                ->post('https://api.fonnte.com/send', [
-                    'target' => env('FONNTE_ADMIN'),
-                    'message' => $pesan,
-                ]);
+⏰ " . now()->format('d M Y H:i');
 
-            return response()->json([
-                'success' => true,
-                'data' => $response->json()
+        try {
+
+            $response = Http::withHeaders([
+
+                'Authorization' => env('FONNTE_TOKEN')
+
+            ])->asForm()->post('https://api.fonnte.com/send', [
+
+                'target' => $admin,
+                'message' => $message,
+
             ]);
 
-        }catch(\Exception $e){
+            if ($response->successful()) {
 
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage()
-            ],500);
+                return back()->with(
+                    'success',
+                    'Laporan berhasil dikirim ke admin'
+                );
+
+            }
+
+            return back()->with(
+                'error',
+                'Gagal mengirim laporan'
+            );
+
+        } catch (\Exception $e) {
+
+            return back()->with(
+                'error',
+                'Terjadi kesalahan koneksi'
+            );
 
         }
     }

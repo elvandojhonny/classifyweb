@@ -135,7 +135,7 @@
 <div class="sidebar">
 
     <div class="logo">
-        Kampus App
+        ClassiFy
     </div>
 
     <div class="menu-title">

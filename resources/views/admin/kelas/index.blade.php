@@ -2,7 +2,7 @@
 
 @section('title', 'Kelas')
 
-@section('page-title', 'Data Kelas')
+@section('page-title', 'Kelas')
 
 @section('content')
 

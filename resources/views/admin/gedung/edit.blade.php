@@ -1,57 +1,186 @@
 @extends('layouts.admin')
 
+@section('title','Edit Gedung')
 @section('navbar','Edit Gedung')
 
 @section('content')
 
-<div class="card-modern">
+<style>
 
-    <h5 class="mb-4">Edit Gedung</h5>
+    .form-card{
+        background: white;
+        border-radius: 28px;
+        padding: 32px;
+        border: 1px solid rgba(0,0,0,0.04);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
 
-    <form method="POST" action="{{ route('gedung.update', $gedung->id) }}">
+    .form-title{
+        font-size: 28px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+
+    .form-subtitle{
+        color: #64748b;
+        margin-bottom: 30px;
+    }
+
+    .form-label{
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 10px;
+    }
+
+    .form-control,
+    .form-select{
+        height: 56px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        padding-left: 18px;
+        transition: 0.3s;
+    }
+
+    .form-control:focus,
+    .form-select:focus{
+        box-shadow: none;
+        border-color: #4f46e5;
+    }
+
+    .btn-modern{
+        border: none;
+        border-radius: 16px;
+        padding: 14px 26px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .btn-primary-modern{
+        background: #4f46e5;
+        color: white;
+    }
+
+    .btn-primary-modern:hover{
+        background: #4338ca;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary-modern{
+        background: #e2e8f0;
+        color: #334155;
+        text-decoration: none;
+    }
+
+    .btn-secondary-modern:hover{
+        background: #cbd5e1;
+        color: #0f172a;
+    }
+
+</style>
+
+<div class="form-card">
+
+    <!-- HEADER -->
+    <div class="mb-4">
+
+        <div class="form-title">
+            Edit Gedung
+        </div>
+
+        <div class="form-subtitle">
+            Perbarui data gedung di dalam sistem
+        </div>
+
+    </div>
+
+    <!-- FORM -->
+    <form method="POST"
+          action="{{ route('gedung.update', $gedung->id) }}">
+
         @csrf
         @method('PUT')
 
-        <div class="mb-3">
-            <label class="form-label">Fakultas</label>
+        <!-- FAKULTAS -->
+        <div class="mb-4">
+
+            <label class="form-label">
+
+                Fakultas
+
+            </label>
 
             <select name="fakultas_id"
-                    class="form-control @error('fakultas_id') is-invalid @enderror">
+                    class="form-select @error('fakultas_id') is-invalid @enderror">
 
                 @foreach($fakultas as $f)
+
                     <option value="{{ $f->id }}"
                         {{ $f->id == old('fakultas_id', $gedung->fakultas_id) ? 'selected' : '' }}>
+
                         {{ $f->nama_fakultas }}
+
                     </option>
+
                 @endforeach
 
             </select>
 
             @error('fakultas_id')
+
                 <div class="invalid-feedback">
+
                     {{ $message }}
+
                 </div>
+
             @enderror
+
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Nama Gedung</label>
+        <!-- NAMA GEDUNG -->
+        <div class="mb-4">
+
+            <label class="form-label">
+
+                Nama Gedung
+
+            </label>
 
             <input type="text"
                    name="nama_gedung"
                    value="{{ old('nama_gedung', $gedung->nama_gedung) }}"
-                   class="form-control @error('nama_gedung') is-invalid @enderror">
+                   class="form-control @error('nama_gedung') is-invalid @enderror"
+                   placeholder="Contoh: Gedung A">
 
             @error('nama_gedung')
+
                 <div class="invalid-feedback">
+
                     {{ $message }}
+
                 </div>
+
             @enderror
+
         </div>
 
-        <div class="d-flex gap-2">
-            <button class="btn btn-primary">Update</button>
-            <a href="{{ route('gedung.index') }}" class="btn btn-secondary">Kembali</a>
+        <!-- BUTTON -->
+        <div class="d-flex gap-3">
+
+            <button class="btn-modern btn-primary-modern">
+
+                Update Gedung
+
+            </button>
+
+            <a href="{{ route('gedung.index') }}"
+               class="btn-modern btn-secondary-modern">
+
+                Kembali
+
+            </a>
+
         </div>
 
     </form>

@@ -10,14 +10,23 @@ class GedungController extends Controller
 {
     public function index()
     {
-        $gedung = Gedung::with('fakultas')->latest()->get();
+    $gedung = Gedung::with('fakultas')
+        ->where(
+            'fakultas_id',
+            auth()->user()->fakultas_id
+        )
+        ->latest()
+        ->get();
 
-        return view('admin.gedung.index', compact('gedung'));
+    return view('admin.gedung.index', compact('gedung'));
     }
 
     public function create()
     {
-        $fakultas = Fakultas::all();
+        $fakultas = Fakultas::where(
+    'id',
+    auth()->user()->fakultas_id
+)->get();
 
         return view('admin.gedung.create', compact('fakultas'));
     }
@@ -30,9 +39,9 @@ class GedungController extends Controller
     ]);
 
     Gedung::create([
-        'fakultas_id' => $request->fakultas_id,
-        'nama_gedung' => $request->nama_gedung
-    ]);
+    'fakultas_id' => auth()->user()->fakultas_id,
+    'nama_gedung' => $request->nama_gedung
+]);
 
     return redirect()
         ->route('gedung.index')
@@ -41,7 +50,10 @@ class GedungController extends Controller
 
     public function edit($id)
     {
-        $gedung = Gedung::findOrFail($id);
+        $gedung = Gedung::where(
+    'fakultas_id',
+    auth()->user()->fakultas_id
+)->findOrFail($id);
 
         $fakultas = Fakultas::all();
 
@@ -60,6 +72,12 @@ class GedungController extends Controller
 
     $gedung = Gedung::findOrFail($id);
 
+    if (
+    $gedung->fakultas_id != auth()->user()->fakultas_id
+){
+    abort(403);
+}
+
     $gedung->update([
         'fakultas_id' => $request->fakultas_id,
         'nama_gedung' => $request->nama_gedung
@@ -71,9 +89,17 @@ class GedungController extends Controller
 }
 
     public function destroy($id)
-    {
-        Gedung::destroy($id);
+{
+    $gedung = Gedung::where(
+        'fakultas_id',
+        auth()->user()->fakultas_id
+    )->findOrFail($id);
 
-        return back()->with('success', 'Gedung berhasil dihapus');
-    }
+    $gedung->delete();
+
+    return back()->with(
+        'success',
+        'Gedung berhasil dihapus'
+    );
+}
 }

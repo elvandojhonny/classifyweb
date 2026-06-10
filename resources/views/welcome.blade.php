@@ -146,6 +146,56 @@
             color:#0f172a;
         }
 
+        .hero-card{
+    background: linear-gradient(135deg,#ffffff,#f8fafc);
+    border-radius: 28px;
+    padding: 40px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+    border: 1px solid #eef2f7;
+}
+
+.mini-info-card{
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    padding: 14px 18px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.mini-info-card i{
+    font-size: 18px;
+    color: #2563eb;
+}
+
+.hero-card h2{
+    font-size: 34px;
+    color: #0f172a;
+}
+
+.hero-card p{
+    font-size: 15px;
+}
+
+
+        /* =========================
+            SCROLL ANIMATION
+        ========================== */
+
+        .reveal{
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1s ease;
+        }
+
+        .reveal.active{
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* =========================
             FEATURES
         ========================== */
@@ -206,6 +256,31 @@
         }
 
         /* =========================
+    SUPPORT FLOAT
+========================== */
+
+.support-float{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    width:65px;
+    height:65px;
+    border:none;
+    border-radius:50%;
+    background:#4f46e5;
+    color:white;
+    font-size:28px;
+    box-shadow:0 10px 30px rgba(79,70,229,0.35);
+    z-index:999;
+    transition:0.3s;
+}
+
+.support-float:hover{
+    transform:translateY(-5px) scale(1.05);
+    background:#4338ca;
+}
+
+        /* =========================
             FOOTER
         ========================== */
 
@@ -236,17 +311,77 @@
 </head>
 <body>
 
+    @php
+
+    use App\Models\Setting;
+    use App\Models\User;
+    use App\Models\Kelas;
+    use App\Models\Peminjaman;
+
+    $setting = Setting::first();
+
+    $totalUser = User::count();
+
+    $totalKelas = Kelas::count();
+
+    $todayPeminjaman = Peminjaman::whereDate('tanggal', now())->count();
+
+@endphp
+
+@if(session('success'))
+
+<div class="position-fixed top-0 end-0 p-4"
+     style="z-index:9999;">
+
+    <div class="alert alert-success shadow rounded-4">
+
+        {{ session('success') }}
+
+    </div>
+
+</div>
+
+@endif
+
+@if(session('error'))
+
+<div class="position-fixed top-0 end-0 p-4"
+     style="z-index:9999;">
+
+    <div class="alert alert-danger shadow rounded-4">
+
+        {{ session('error') }}
+
+    </div>
+
+</div>
+
+@endif
+
 <div class="container">
 
     <!-- NAVBAR -->
     <div class="navbar-custom d-flex justify-content-between align-items-center">
 
         <div class="brand">
-            ClassiFy
-        </div>
+    {{ $setting->system_name ?? 'ClassiFy' }}
+</div>
 
 
-    </div>
+
+</div>
+
+<!-- RUNNING TEXT -->
+<div class="bg-dark text-white py-2 overflow-hidden rounded-4">
+
+    <marquee behavior="scroll"
+             direction="left">
+
+        📢 {{ $setting->running_text }}
+
+    </marquee>
+
+</div>
 
     <!-- HERO -->
     <div class="hero">
@@ -261,9 +396,7 @@
                 </h1>
 
                 <p>
-                    Platform digital untuk mempermudah proses peminjaman
-                    ruang kelas kampus secara cepat, modern,
-                    dan realtime.
+                    {{ $setting->welcome_description }}
                 </p>
 
                 <a href="{{ route('login') }}" class="hero-btn">
@@ -274,29 +407,42 @@
             </div>
 
             <!-- RIGHT -->
-            <div class="col-lg-6">
+<div class="col-lg-6">
 
-                <div class="hero-card">
+    <div class="hero-card position-relative overflow-hidden">
 
-                    <div class="stat-box">
-                        <small>Total Ruangan</small>
-                        <h2>24</h2>
-                    </div>
+        <div class="mb-4">
 
-                    <div class="stat-box">
-                        <small>Peminjaman Hari Ini</small>
-                        <h2>12</h2>
-                    </div>
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                Sistem Aktif
+            </span>
 
-                    <div class="stat-box">
-                        <small>Status Sistem</small>
-                        <h2 style="font-size:24px;color:#16a34a;">
-                            Online
-                        </h2>
-                    </div>
+        </div>
 
-                </div>
+        <h2 class="fw-bold mb-3">
+            Selamat Datang 👋
+        </h2>
 
+        <p class="text-secondary mb-4" style="line-height:1.8;">
+            Sistem peminjaman ruangan kampus membantu proses
+            reservasi menjadi lebih cepat, praktis, dan terorganisir.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3">
+
+            <div class="mini-info-card">
+                <i class="bi bi-building"></i>
+                <span>{{ $totalKelas }} Ruangan</span>
+            </div>
+
+            <div class="mini-info-card">
+                <i class="bi bi-shield-check"></i>
+                <span>{{ $setting->system_status }}</span>
+            </div>
+
+            <div class="mini-info-card">
+                <i class="bi bi-calendar2-check"></i>
+                <span>Booking Online</span>
             </div>
 
         </div>
@@ -304,9 +450,13 @@
     </div>
 
 </div>
+        </div>
 
+    </div>
+
+</div>
 <!-- FEATURES -->
-<div class="section">
+<div class="section reveal">
 
     <div class="container">
 
@@ -433,9 +583,962 @@
 
 </div>
 
+<!-- =========================
+        ABOUT
+========================== -->
+
+<div class="section">
+
+    <div class="container">
+
+        <div class="row align-items-center g-5">
+
+            <!-- LEFT -->
+            <div class="col-lg-6">
+
+                <div class="hero-card">
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+
+                            <div class="stat-box">
+
+                                <small>Total Pengguna</small>
+
+                                <h2>{{ $totalUser }}</h2>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <div class="stat-box">
+
+                                <small>Total Kelas</small>
+
+                                <h2>{{ $totalKelas }}</h2>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <div class="stat-box">
+
+                                <small>Status Sistem</small>
+
+                                <h2 style="font-size:24px;color:#16a34a;">
+
+                                    {{ $setting->system_status }}
+
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-lg-6">
+
+                <div class="section-title text-start mb-4">
+
+                    <h2>
+                        Tentang Kami
+                    </h2>
+
+                    <p>
+                        Platform digital modern untuk mendukung
+                        pengelolaan peminjaman ruang kelas kampus
+                        secara efisien, aman, dan realtime.
+                    </p>
+
+                </div>
+
+                <div class="feature-card">
+
+                    <h4 class="mb-3">
+                        Sistem Kampus Modern
+                    </h4>
+
+                    <p class="mb-4">
+
+                        Sistem ini dirancang untuk membantu mahasiswa
+                        dan pihak kampus dalam proses peminjaman kelas,
+                        monitoring penggunaan ruangan,
+                        serta pengelolaan aktivitas kampus secara digital.
+
+                    </p>
+
+                    <div class="d-flex flex-column gap-3">
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="feature-icon"
+                                 style="width:55px;height:55px;font-size:22px;">
+
+                                <i class="bi bi-check-circle"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Monitoring Realtime
+                                </strong>
+
+                                <div class="text-muted small">
+                                    Pantau aktivitas peminjaman secara langsung
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="feature-icon"
+                                 style="width:55px;height:55px;font-size:22px;">
+
+                                <i class="bi bi-building"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Pengelolaan Ruangan
+                                </strong>
+
+                                <div class="text-muted small">
+                                    Data kelas dan gedung lebih terorganisir
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex align-items-center gap-3">
+
+                            <div class="feature-icon"
+                                 style="width:55px;height:55px;font-size:22px;">
+
+                                <i class="bi bi-shield-check"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    Sistem Aman
+                                </strong>
+
+                                <div class="text-muted small">
+                                    Mendukung autentikasi dan validasi data
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+    FAQ
+========================== -->
+
+<div class="section reveal">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                Pertanyaan Umum
+            </h2>
+
+            <p>
+                Beberapa pertanyaan yang sering ditanyakan pengguna
+            </p>
+
+        </div>
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+
+                <div class="accordion"
+                     id="faqAccordion">
+
+                    <!-- ITEM -->
+                    <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
+
+                        <h2 class="accordion-header">
+
+                            <button class="accordion-button"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#faq1">
+
+                                Bagaimana cara melakukan peminjaman kelas?
+
+                            </button>
+
+                        </h2>
+
+                        <div id="faq1"
+                             class="accordion-collapse collapse show"
+                             data-bs-parent="#faqAccordion">
+
+                            <div class="accordion-body">
+
+                                Login ke sistem, pilih kelas,
+                                lalu isi form peminjaman.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ITEM -->
+                    <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
+
+                        <h2 class="accordion-header">
+
+                            <button class="accordion-button collapsed"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#faq2">
+
+                                Apakah peminjaman langsung disetujui?
+
+                            </button>
+
+                        </h2>
+
+                        <div id="faq2"
+                             class="accordion-collapse collapse"
+                             data-bs-parent="#faqAccordion">
+
+                            <div class="accordion-body">
+
+                                Tidak, pengajuan akan diverifikasi admin terlebih dahulu.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ITEM -->
+                    <div class="accordion-item border-0 rounded-4 shadow-sm overflow-hidden">
+
+                        <h2 class="accordion-header">
+
+                            <button class="accordion-button collapsed"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#faq3">
+
+                                Bagaimana jika terjadi kendala sistem?
+
+                            </button>
+
+                        </h2>
+
+                        <div id="faq3"
+                             class="accordion-collapse collapse"
+                             data-bs-parent="#faqAccordion">
+
+                            <div class="accordion-body">
+
+                                Gunakan fitur Hubungi Admin untuk mengirim laporan.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+    TESTIMONI
+========================== -->
+
+<div class="section reveal bg-white">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                Apa Kata Pengguna?
+            </h2>
+
+            <p>
+                Pengalaman mahasiswa menggunakan sistem
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <p>
+                        “Sistemnya sangat membantu dan proses peminjaman jadi jauh lebih cepat.”
+                    </p>
+
+                    <div class="mt-4">
+
+                        <strong>
+                            Dwi Saputra
+                        </strong>
+
+                        <div class="text-muted small">
+                            Mahasiswa
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <p>
+                        “UI modern dan mudah digunakan bahkan dari HP.”
+                    </p>
+
+                    <div class="mt-4">
+
+                        <strong>
+                            Randi
+                        </strong>
+
+                        <div class="text-muted small">
+                            Mahasiswa
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <p>
+                        “Pengelolaan ruangan sekarang jauh lebih terorganisir.”
+                    </p>
+
+                    <div class="mt-4">
+
+                        <strong>
+                            Dina Mariana
+                        </strong>
+
+                        <div class="text-muted small">
+                            Mahasiswa
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+    TEAM
+========================== -->
+
+<div class="section reveal">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                Tim Developer
+            </h2>
+
+            <p>
+                Tim pengembang sistem peminjaman kelas kampus
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- ORANG 1 -->
+            <div class="col-md-4">
+
+                <div class="feature-card text-center">
+
+                    <img src="{{ asset('img/team/team1.jpeg') }}"
+                         class="rounded-circle mb-4"
+                         width="110"
+                         height="110"
+                         style="object-fit:cover;">
+
+                    <h4>
+                        Elvando J
+                    </h4>
+
+                    <p>
+                        Fullstack Developer
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- ORANG 2 -->
+            <div class="col-md-4">
+
+                <div class="feature-card text-center">
+
+                    <img src="{{ asset('img/team/team2.jpeg') }}"
+                         class="rounded-circle mb-4"
+                         width="110"
+                         height="110"
+                         style="object-fit:cover;">
+
+                    <h4>
+                        Muhammad Tiandra
+                    </h4>
+
+                    <p>
+                        Backend Developer
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- ORANG 3 -->
+            <div class="col-md-4">
+
+                <div class="feature-card text-center">
+
+                    <img src="{{ asset('img/team/team3.jpeg') }}"
+                         class="rounded-circle mb-4"
+                         width="110"
+                         height="110"
+                         style="object-fit:cover;">
+
+                    <h4>
+                        Indra Husain
+                    </h4>
+
+                    <p>
+                        UI/UX Designer
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- ORANG 4 -->
+            <div class="col-md-4">
+
+                <div class="feature-card text-center">
+
+                    <img src="{{ asset('img/team/team4.jpeg') }}"
+                         class="rounded-circle mb-4"
+                         width="110"
+                         height="110"
+                         style="object-fit:cover;">
+
+                    <h4>
+                        M.Ridho
+                    </h4>
+
+                    <p>
+                        Frontend Developer
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- ORANG 5 -->
+            <div class="col-md-4">
+
+                <div class="feature-card text-center">
+
+                    <img src="{{ asset('img/team/team5.jpeg') }}"
+                         class="rounded-circle mb-4"
+                         width="110"
+                         height="110"
+                         style="object-fit:cover;">
+
+                    <h4>
+                        Nabil Basmalah
+                    </h4>
+
+                    <p>
+                        Project Manager
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- ORANG 6 -->
+            <div class="col-md-4">
+
+                <div class="feature-card text-center">
+
+                    <img src="{{ asset('img/team/team6.jpeg') }}"
+                         class="rounded-circle mb-4"
+                         width="110"
+                         height="110"
+                         style="object-fit:cover;">
+
+                    <h4>
+                        Muhammad Fauzan
+                    </h4>
+
+                    <p>
+                        QA Engineer
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+    CONTACT
+========================== -->
+
+<!-- =========================
+    CONTACT
+========================== -->
+
+<div class="section reveal bg-white">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                Kontak Kampus
+            </h2>
+
+            <p>
+                Informasi dan layanan kampus
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- LOKASI -->
+<div class="col-md-4">
+
+    <a href="#"
+        data-bs-toggle="modal"
+        data-bs-target="#mapModal"
+        class="text-decoration-none text-dark">
+
+        <div class="feature-card text-center">
+
+            <div class="feature-icon mx-auto">
+                <i class="bi bi-geo-alt"></i>
+            </div>
+
+            <h4>
+                Lokasi Kampus
+            </h4>
+
+            <p>
+                {{ $setting->campus_address }}
+            </p>
+
+        </div>
+
+    </a>
+
+</div>
+
+            <!-- EMAIL -->
+            <div class="col-md-4">
+
+                <a href="mailto:{{ $setting->support_email }}"
+                   class="text-decoration-none text-dark">
+
+                    <div class="feature-card text-center">
+
+                        <div class="feature-icon mx-auto">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+
+                        <h4>
+                            Email
+                        </h4>
+
+                        <p>
+                            {{ $setting->support_email }}
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+            <!-- PHONE -->
+            <div class="col-md-4">
+
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $setting->support_phone) }}"
+                   target="_blank"
+                   class="text-decoration-none text-dark">
+
+                    <div class="feature-card text-center">
+
+                        <div class="feature-icon mx-auto">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+
+                        <h4>
+                            Telepon
+                        </h4>
+
+                        <p>
+                            {{ $setting->support_phone }}
+                        </p>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- FEATURES -->
+
+
+
 <footer>
-    © 2026 ClassiFy — Sistem Peminjaman Kelas
+    © 2026 {{ $setting->system_name }} — Sistem Peminjaman Kelas
 </footer>
+
+<!-- =========================
+    SUPPORT MODAL
+========================== -->
+
+<div class="modal fade"
+     id="supportModal"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <div class="modal-content border-0 rounded-5 overflow-hidden">
+
+            <!-- HEADER -->
+            <div class="p-4 text-white"
+                 style="background:linear-gradient(135deg,#4f46e5,#4338ca);">
+
+                <h3 class="fw-bold mb-1">
+
+                    Hubungi Admin
+
+                </h3>
+
+                <small>
+                    Laporkan kendala atau masalah sistem
+                </small>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="p-4">
+
+                <form action="{{ route('support.send') }}"
+                      method="POST">
+
+                    @csrf
+
+                    <div class="row">
+
+                        <!-- NAMA -->
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Nama 
+
+                            </label>
+
+                            <input type="text"
+                                   name="nama"
+                                   class="form-control rounded-4"
+                                   required>
+
+                        </div>
+
+                        <!-- HP -->
+                        <div class="col-md-6 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Nomor HP
+
+                            </label>
+
+                            <input type="text"
+                                   name="nomor"
+                                   class="form-control rounded-4"
+                                   required>
+
+                        </div>
+
+                        <!-- KATEGORI -->
+                        <div class="col-md-12 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Jenis Kendala
+
+                            </label>
+
+                            <select name="kategori"
+                                    class="form-select rounded-4"
+                                    required>
+
+                                <option value="">
+                                    Pilih Kendala
+                                </option>
+
+                                <option>
+                                    Tidak Bisa Login
+                                </option>
+
+                                <option>
+                                    Error Sistem
+                                </option>
+
+                                <option>
+                                    Peminjaman Bermasalah
+                                </option>
+
+                                <option>
+                                    Bug Tampilan
+                                </option>
+
+                                <option>
+                                    Laporan Lainnya
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- PESAN -->
+                        <div class="col-md-12 mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Detail Kendala
+
+                            </label>
+
+                            <textarea name="pesan"
+                                      rows="5"
+                                      class="form-control rounded-4"
+                                      placeholder="Jelaskan kendala yang dialami..."
+                                      required></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <button class="btn w-100 text-white rounded-4 py-3 fw-semibold"
+                            style="background:#4f46e5;">
+
+                        Kirim Laporan
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- FLOATING SUPPORT -->
+
+<button class="support-float"
+        data-bs-toggle="modal"
+        data-bs-target="#supportModal">
+
+    <i class="bi bi-headset"></i>
+
+</button>
+
+<script>
+
+    function revealElements(){
+
+        let reveals = document.querySelectorAll('.reveal');
+
+        for(let i = 0; i < reveals.length; i++){
+
+            let windowHeight = window.innerHeight;
+
+            let elementTop = reveals[i].getBoundingClientRect().top;
+
+            let elementVisible = 100;
+
+            if(elementTop < windowHeight - elementVisible){
+
+                reveals[i].classList.add('active');
+
+            }
+
+        }
+
+    }
+
+    window.addEventListener('scroll', revealElements);
+
+    revealElements();
+
+</script>
+
+
+<!-- =========================
+    MAP MODAL
+========================== -->
+
+<div class="modal fade"
+     id="mapModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content border-0 rounded-5 overflow-hidden">
+
+            <!-- HEADER -->
+            <div class="p-4 text-white"
+                 style="background:linear-gradient(135deg,#4f46e5,#4338ca);">
+
+                <h3 class="fw-bold mb-1">
+
+                    Lokasi Kampus
+
+                </h3>
+
+                <small>
+
+                    {{ $setting->campus_address }}
+
+                </small>
+
+            </div>
+
+            <!-- MAP -->
+            <div>
+
+                <iframe
+                    src="{{ $setting->maps_embed }}"
+                    width="100%"
+                    height="500"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy">
+
+                </iframe>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="p-4 bg-white d-flex justify-content-between align-items-center">
+
+                <div class="text-muted">
+
+                    Universitas Muhammadiyah Kalimantan Timur
+
+                </div>
+
+                <a href="{{ $setting->maps_link }}"
+                   target="_blank"
+                   class="btn btn-primary rounded-4 px-4">
+
+                    Buka Google Maps
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>

@@ -8,6 +8,10 @@
 
 <style>
 
+    /* =========================
+        STAT CARD
+    ========================== */
+
     .stat-card{
         background: white;
         border-radius: 24px;
@@ -84,20 +88,50 @@
     .content-card h5{
         font-weight: 700;
         color: #0f172a;
-        margin-bottom: 20px;
     }
+
+    /* =========================
+        SCROLL AKTIVITAS
+    ========================== */
+
+    .activity-scroll{
+        max-height: 360px;
+        overflow-y: auto;
+        padding-right: 6px;
+    }
+
+    .activity-scroll::-webkit-scrollbar{
+        width: 6px;
+    }
+
+    .activity-scroll::-webkit-scrollbar-thumb{
+        background: #cbd5e1;
+        border-radius: 20px;
+    }
+
+    .activity-scroll::-webkit-scrollbar-track{
+        background: transparent;
+    }
+
+    /* =========================
+        ACTIVITY ITEM
+    ========================== */
 
     .activity-item{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 15px 0;
+        padding: 18px 0;
         border-bottom: 1px solid #e2e8f0;
     }
 
     .activity-item:last-child{
         border-bottom: none;
     }
+
+    /* =========================
+        BADGE
+    ========================== */
 
     .badge-modern{
         padding: 7px 14px;
@@ -123,7 +157,10 @@
 
 </style>
 
-<!-- STATISTIK -->
+<!-- =========================
+    STATISTIK
+========================== -->
+
 <div class="row g-4">
 
     <!-- FAKULTAS -->
@@ -199,7 +236,7 @@
             </div>
 
             <div class="stat-title">
-                Total User
+                Total Akun
             </div>
 
             <div class="stat-number">
@@ -212,7 +249,10 @@
 
 </div>
 
-<!-- CONTENT -->
+<!-- =========================
+    CONTENT
+========================== -->
+
 <div class="row">
 
     <!-- AKTIVITAS -->
@@ -220,56 +260,83 @@
 
         <div class="content-card">
 
-            <h5>Aktivitas Peminjaman</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3">
 
-            @forelse($aktivitas as $item)
+                <h5 class="mb-0">
+                    Aktivitas Peminjaman
+                </h5>
 
-            <div class="activity-item">
+                <small class="text-muted">
+                    Aktivitas terbaru sistem
+                </small>
 
-                <div>
+            </div>
 
-                    <strong>
-                        {{ $item->kelas->nama_kelas }}
-                    </strong><br>
+            <!-- SCROLL -->
+            <div class="activity-scroll">
 
-                    <small class="text-muted">
+                @forelse($aktivitas as $item)
 
-                        Dipinjam oleh
-                        {{ $item->user->name }}
+                <div class="activity-item">
 
-                    </small>
+                    <div>
+
+                        <strong>
+                            {{ $item->kelas->nama_kelas }}
+                        </strong>
+
+                        <div class="text-muted small mt-1">
+
+                            Dipinjam oleh
+                            {{ $item->user->name }}
+
+                        </div>
+
+                        <div class="text-secondary small">
+
+                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                            •
+                            {{ $item->jam_mulai }}
+                            -
+                            {{ $item->jam_selesai }}
+
+                        </div>
+
+                    </div>
+
+                    @if($item->status == 'disetujui')
+
+                        <span class="badge-modern badge-success">
+                            Disetujui
+                        </span>
+
+                    @elseif($item->status == 'ditolak')
+
+                        <span class="badge-modern badge-danger">
+                            Ditolak
+                        </span>
+
+                    @else
+
+                        <span class="badge-modern badge-warning">
+                            Pending
+                        </span>
+
+                    @endif
 
                 </div>
 
-                @if($item->status == 'disetujui')
+                @empty
 
-                    <span class="badge-modern badge-success">
-                        Disetujui
-                    </span>
+                <div class="text-muted text-center py-4">
 
-                @elseif($item->status == 'ditolak')
+                    Belum ada aktivitas peminjaman
 
-                    <span class="badge-modern badge-danger">
-                        Ditolak
-                    </span>
+                </div>
 
-                @else
-
-                    <span class="badge-modern badge-warning">
-                        Pending
-                    </span>
-
-                @endif
+                @endforelse
 
             </div>
-
-            @empty
-
-            <div class="text-muted">
-                Belum ada aktivitas peminjaman
-            </div>
-
-            @endforelse
 
         </div>
 
@@ -280,7 +347,9 @@
 
         <div class="content-card">
 
-            <h5>Informasi Sistem</h5>
+            <h5 class="mb-4">
+                Informasi Sistem
+            </h5>
 
             <div class="mb-4">
 
@@ -294,7 +363,7 @@
 
             <div class="mb-4">
 
-                <strong>Total Peminjaman</strong><br>
+                <strong>Total Aktivitas</strong><br>
 
                 <small class="text-muted">
                     {{ $aktivitas->count() }} aktivitas terbaru

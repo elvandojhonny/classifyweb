@@ -14,7 +14,17 @@ class PeminjamanController extends Controller
     public function create($kelas_id)
     {
         $kelas = Kelas::with('gedung.fakultas')
-            ->findOrFail($kelas_id);
+
+    ->whereHas('gedung', function ($q){
+
+        $q->where(
+            'fakultas_id',
+            auth()->user()->fakultas_id
+        );
+
+    })
+
+    ->findOrFail($kelas_id);
 
         return view('user.peminjaman.create', compact('kelas'));
     }
@@ -31,6 +41,16 @@ class PeminjamanController extends Controller
             'jam_selesai' => 'required',
             'keperluan' => 'required'
         ]);
+
+        $kelas = Kelas::with('gedung')
+        ->findOrFail($request->kelas_id);
+
+        if(
+            $kelas->gedung->fakultas_id
+            != auth()->user()->fakultas_id
+        ){
+            abort(403);
+        }
 
         Peminjaman::create([
             'user_id' => auth()->id(),
@@ -65,9 +85,23 @@ class PeminjamanController extends Controller
     // =========================
     public function index()
     {
-        $data = Peminjaman::with('user', 'kelas.gedung.fakultas')
-            ->latest()
-            ->get();
+        $data = Peminjaman::with(
+        'user',
+        'kelas.gedung.fakultas'
+    )
+
+    ->whereHas('kelas.gedung', function ($q){
+
+        $q->where(
+            'fakultas_id',
+            auth()->user()->fakultas_id
+        );
+
+    })
+
+    ->latest()
+
+    ->get();
 
         return view('admin.peminjaman.index', compact('data'));
     }
@@ -77,7 +111,15 @@ class PeminjamanController extends Controller
     // =========================
     public function approve($id)
     {
-        $data = Peminjaman::findOrFail($id);
+        $data = Peminjaman::with('kelas.gedung')
+    ->findOrFail($id);
+
+if(
+    $data->kelas->gedung->fakultas_id
+    != auth()->user()->fakultas_id
+){
+    abort(403);
+}
 
         $data->update([
             'status' => 'disetujui'
@@ -91,11 +133,19 @@ class PeminjamanController extends Controller
     // =========================
     public function reject($id)
     {
-        $data = Peminjaman::findOrFail($id);
+       $data = Peminjaman::with('kelas.gedung')
+    ->findOrFail($id);
 
-        $data->update([
-            'status' => 'ditolak'
-        ]);
+if(
+    $data->kelas->gedung->fakultas_id
+    != auth()->user()->fakultas_id
+){
+    abort(403);
+}
+
+$data->update([
+    'status' => 'ditolak'
+]);
 
         return back()->with('success', 'Pengajuan ditolak');
     }

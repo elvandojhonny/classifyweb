@@ -174,68 +174,111 @@
 <div class="sidebar">
 
     <div class="logo">
-        Admin Panel
-    </div>
+
+    @if(auth()->user()->role == 'superadmin')
+
+        Super Admin
+
+    @elseif(auth()->user()->role == 'admin')
+
+        Admin Fakultas
+
+    @else
+
+        User Panel
+
+    @endif
+
+</div>
 
     <div class="menu-title">
-        Main Menu
-    </div>
+    Main Menu
+</div>
 
-    <a href="{{ route('admin.dashboard') }}"
-       class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+<!-- DASHBOARD -->
+<a href="{{ route('admin.dashboard') }}"
+   class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
 
-        <i class="bi bi-grid-1x2-fill"></i>
-        Dashboard
+    <i class="bi bi-grid-1x2-fill"></i>
+    Dashboard
 
-    </a>
+</a>
 
-    <a href="{{ route('fakultas.index') }}"
-       class="{{ request()->routeIs('fakultas.*') ? 'active' : '' }}">
+<!-- SUPER ADMIN ONLY -->
+@if(auth()->user()->role == 'superadmin')
 
-        <i class="bi bi-bank"></i>
-        Fakultas
+<a href="{{ route('fakultas.index') }}"
+   class="{{ request()->routeIs('fakultas.*') ? 'active' : '' }}">
 
-    </a>
+    <i class="bi bi-bank"></i>
+    Fakultas
 
-    <a href="{{ route('gedung.index') }}"
-       class="{{ request()->routeIs('gedung.*') ? 'active' : '' }}">
+</a>
 
-        <i class="bi bi-building"></i>
-        Gedung
+@endif
 
-    </a>
+<!-- GEDUNG -->
+<a href="{{ route('gedung.index') }}"
+   class="{{ request()->routeIs('gedung.*') ? 'active' : '' }}">
 
-    <a href="{{ route('kelas.index') }}"
-       class="{{ request()->routeIs('kelas.*') ? 'active' : '' }}">
+    <i class="bi bi-building"></i>
+    Gedung
 
-        <i class="bi bi-door-open"></i>
-        Kelas
+</a>
 
-    </a>
+<!-- KELAS -->
+<a href="{{ route('kelas.index') }}"
+   class="{{ request()->routeIs('kelas.*') ? 'active' : '' }}">
 
-    <a href="{{ route('users.index') }}"
-       class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
+    <i class="bi bi-door-open"></i>
+    Kelas
 
-        <i class="bi bi-people"></i>
-        Akun
+</a>
 
-    </a>
+<!-- USER -->
+<a href="{{ route('users.index') }}"
+   class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
 
-    <a href="{{ route('admin.peminjaman') }}"
-       class="{{ request()->routeIs('admin.peminjaman') ? 'active' : '' }}">
+    <i class="bi bi-people"></i>
 
-        <i class="bi bi-journal-text"></i>
-        Peminjaman
+    @if(auth()->user()->role == 'superadmin')
+        Manajemen Akun
+    @else
+        User Fakultas
+    @endif
 
-    </a>
+</a>
 
-    <a href="{{ route('pengumuman.index') }}"
-       class="{{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">
+<!-- PEMINJAMAN -->
+<a href="{{ route('admin.peminjaman') }}"
+   class="{{ request()->routeIs('admin.peminjaman') ? 'active' : '' }}">
 
-        <i class="bi bi-bell"></i>
-        Pengumuman
+    <i class="bi bi-journal-text"></i>
+    Peminjaman
 
-    </a>
+</a>
+
+<!-- PENGUMUMAN -->
+<a href="{{ route('pengumuman.index') }}"
+   class="{{ request()->routeIs('pengumuman.*') ? 'active' : '' }}">
+
+    <i class="bi bi-bell"></i>
+    Pengumuman
+
+</a>
+
+<!-- SETTINGS HANYA SUPER ADMIN -->
+@if(auth()->user()->role == 'superadmin')
+
+<a href="{{ route('settings.index') }}"
+   class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">
+
+    <i class="bi bi-gear"></i>
+    Pengaturan Sistem
+
+</a>
+
+@endif
 
     <hr>
 
@@ -276,7 +319,25 @@
 
             <div class="text-end">
                 <strong>{{ auth()->user()->name }}</strong><br>
-                <small class="text-muted">Administrator</small>
+                @if(auth()->user()->role == 'superadmin')
+
+    <small class="text-muted">
+        Super Admin
+    </small>
+
+@elseif(auth()->user()->role == 'admin')
+
+    <small class="text-muted">
+        Admin Fakultas
+    </small>
+
+@else
+
+    <small class="text-muted">
+        User
+    </small>
+
+@endif
             </div>
 
             <div class="profile-user">

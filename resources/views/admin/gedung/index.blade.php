@@ -2,7 +2,7 @@
 
 @section('title', 'Gedung')
 
-@section('page-title', 'Data Gedung')
+@section('page-title', 'Gedung')
 
 @section('content')
 

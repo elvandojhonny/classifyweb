@@ -114,7 +114,7 @@
 
     <div>
 
-        <h3>Profile User</h3>
+        <h3>Profile</h3>
 
         <p>
             Informasi akun pengguna sistem

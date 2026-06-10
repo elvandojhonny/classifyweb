@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 #[Fillable([
     'name',
@@ -15,7 +16,8 @@ use Illuminate\Notifications\Notifiable;
     'password',
     'role',
     'nim',
-    'prodi'
+    'prodi',
+    'fakultas_id'
 ])]
 
 #[Hidden([
@@ -23,7 +25,8 @@ use Illuminate\Notifications\Notifiable;
     'remember_token'
 ])]
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -38,5 +41,13 @@ class User extends Authenticatable
     public function peminjaman()
 {
     return $this->hasMany(Peminjaman::class);
+}
+
+public function fakultas()
+{
+    return $this->belongsTo(
+        Fakultas::class,
+        'fakultas_id'
+    );
 }
 }

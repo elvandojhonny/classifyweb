@@ -62,7 +62,10 @@ class DashboardController extends Controller
     */
 
     public function admin()
-    {
+{
+    // SUPER ADMIN
+    if (auth()->user()->role == 'superadmin') {
+
         $totalFakultas = Fakultas::count();
 
         $totalGedung = Gedung::count();
@@ -71,17 +74,71 @@ class DashboardController extends Controller
 
         $totalUser = User::count();
 
-        $aktivitas = Peminjaman::with('user', 'kelas')
+        $aktivitas = Peminjaman::with(
+                'user',
+                'kelas.gedung.fakultas'
+            )
             ->latest()
             ->take(5)
             ->get();
 
-        return view('admin.dashboard', compact(
-            'totalFakultas',
-            'totalGedung',
-            'totalKelas',
-            'totalUser',
-            'aktivitas'
-        ));
     }
+
+    // ADMIN FAKULTAS
+    else {
+
+        $fakultasId = auth()->user()->fakultas_id;
+
+        $totalFakultas = 1;
+
+        $totalGedung = Gedung::where(
+            'fakultas_id',
+            $fakultasId
+        )->count();
+
+        $totalKelas = Kelas::whereHas(
+            'gedung',
+            function ($q) use ($fakultasId) {
+
+                $q->where(
+                    'fakultas_id',
+                    $fakultasId
+                );
+
+            }
+        )->count();
+
+        $totalUser = User::where(
+            'fakultas_id',
+            $fakultasId
+        )->count();
+
+        $aktivitas = Peminjaman::with(
+                'user',
+                'kelas.gedung.fakultas'
+            )
+            ->whereHas(
+                'kelas.gedung',
+                function ($q) use ($fakultasId) {
+
+                    $q->where(
+                        'fakultas_id',
+                        $fakultasId
+                    );
+
+                }
+            )
+            ->latest()
+            ->take(5)
+            ->get();
+    }
+
+    return view('admin.dashboard', compact(
+        'totalFakultas',
+        'totalGedung',
+        'totalKelas',
+        'totalUser',
+        'aktivitas'
+    ));
+}
 }

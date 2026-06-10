@@ -11,6 +11,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\SettingController;
 
 use App\Models\Pengumuman;
 
@@ -42,8 +43,10 @@ Route::post('/support/send', [SupportController::class, 'send'])
 
 Route::get('/dashboard', function () {
 
-    if (auth()->user()->role == 'admin') {
-
+    if (
+        auth()->user()->role == 'admin' ||
+        auth()->user()->role == 'superadmin'
+    ) {
         return redirect()->route('admin.dashboard');
     }
 
@@ -75,33 +78,15 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->group(function () {
-
-    /*
-    |--------------------------------------------------------------------------
-    | USER DASHBOARD
-    |--------------------------------------------------------------------------
-    */
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/user/dashboard',
         [DashboardController::class, 'user'])
         ->name('user.dashboard');
 
-    /*
-    |--------------------------------------------------------------------------
-    | KELAS
-    |--------------------------------------------------------------------------
-    */
-
     Route::get('/user/kelas',
         [KelasController::class, 'userIndex'])
         ->name('user.kelas');
-
-    /*
-    |--------------------------------------------------------------------------
-    | PEMINJAMAN
-    |--------------------------------------------------------------------------
-    */
 
     Route::get('/peminjaman/create/{kelas_id}',
         [PeminjamanController::class, 'create'])
@@ -111,21 +96,9 @@ Route::middleware(['auth'])->group(function () {
         [PeminjamanController::class, 'store'])
         ->name('peminjaman.store');
 
-    /*
-    |--------------------------------------------------------------------------
-    | RIWAYAT
-    |--------------------------------------------------------------------------
-    */
-
     Route::get('/user/riwayat',
         [PeminjamanController::class, 'riwayat'])
         ->name('user.riwayat');
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROFILE USER
-    |--------------------------------------------------------------------------
-    */
 
     Route::view('/user/profile', 'user.profile')
         ->name('user.profile');
@@ -137,11 +110,13 @@ Route::middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified'])
+    ->prefix('admin')
+    ->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | ADMIN DASHBOARD
+    | DASHBOARD
     |--------------------------------------------------------------------------
     */
 
@@ -151,27 +126,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | FAKULTAS
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource('fakultas', FakultasController::class);
-
-    /*
-    |--------------------------------------------------------------------------
     | GEDUNG
     |--------------------------------------------------------------------------
     */
 
-    /*
-    |--------------------------------------------------------------------------
-    | PENGUMUMAN
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource('pengumuman', PengumumanController::class);
-
-    Route::resource('gedung', GedungController::class);
+    Route::resource(
+        'gedung',
+        GedungController::class
+    );
 
     /*
     |--------------------------------------------------------------------------
@@ -179,7 +141,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('kelas', KelasController::class);
+    Route::resource(
+        'kelas',
+        KelasController::class
+    );
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +152,21 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('users', UserController::class);
+    Route::resource(
+        'users',
+        UserController::class
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | PENGUMUMAN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource(
+        'pengumuman',
+        PengumumanController::class
+    );
 
     /*
     |--------------------------------------------------------------------------
@@ -206,6 +185,31 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::put('/peminjaman/{id}/reject',
         [PeminjamanController::class, 'reject'])
         ->name('peminjaman.reject');
+
+    /*
+    |--------------------------------------------------------------------------
+    | SUPER ADMIN ONLY
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware(['superadmin'])
+        ->group(function () {
+
+        Route::resource(
+            'fakultas',
+            FakultasController::class
+        );
+
+        Route::get('/settings',
+            [SettingController::class, 'edit'])
+            ->name('settings.index');
+
+        Route::put('/settings',
+            [SettingController::class, 'update'])
+            ->name('settings.update');
+
+    });
+
 });
 
 require __DIR__.'/auth.php';

@@ -16,7 +16,20 @@ class KelasController extends Controller
 
     public function index()
     {
-        $kelas = Kelas::with('gedung')->latest()->get();
+        $kelas = Kelas::with('gedung')
+
+    ->whereHas('gedung', function ($q) {
+
+        $q->where(
+            'fakultas_id',
+            auth()->user()->fakultas_id
+        );
+
+    })
+
+    ->latest()
+
+    ->get();
 
         return view('admin.kelas.index', compact('kelas'));
     }
@@ -30,8 +43,19 @@ class KelasController extends Controller
     public function userIndex()
     {
         $kelas = Kelas::with('gedung.fakultas')
-            ->latest()
-            ->get();
+
+    ->whereHas('gedung', function ($q) {
+
+        $q->where(
+            'fakultas_id',
+            auth()->user()->fakultas_id
+        );
+
+    })
+
+    ->latest()
+
+    ->get();
 
         return view('user.kelas.index', compact('kelas'));
     }
@@ -44,7 +68,10 @@ class KelasController extends Controller
 
     public function create()
     {
-        $gedung = Gedung::all();
+        $gedung = Gedung::where(
+    'fakultas_id',
+    auth()->user()->fakultas_id
+)->get();
 
         return view('admin.kelas.create', compact('gedung'));
     }
@@ -62,6 +89,17 @@ class KelasController extends Controller
             'nama_kelas' => 'required',
             'keterangan' => 'nullable'
         ]);
+
+        $gedung = Gedung::findOrFail(
+    $request->gedung_id
+);
+
+if (
+    $gedung->fakultas_id
+    != auth()->user()->fakultas_id
+){
+    abort(403);
+}
 
         Kelas::create([
             'gedung_id' => $request->gedung_id,
@@ -82,7 +120,17 @@ class KelasController extends Controller
 
     public function edit(Kelas $kela)
     {
-        $gedung = Gedung::all();
+
+    if (
+    $kela->gedung->fakultas_id
+    != auth()->user()->fakultas_id
+){
+    abort(403);
+}
+        $gedung = Gedung::where(
+    'fakultas_id',
+    auth()->user()->fakultas_id
+)->get();
 
         return view('admin.kelas.edit', [
             'kelas' => $kela,
@@ -98,11 +146,29 @@ class KelasController extends Controller
 
     public function update(Request $request, Kelas $kela)
     {
+        if (
+    $kela->gedung->fakultas_id
+    != auth()->user()->fakultas_id
+){
+    abort(403);
+}
+
         $request->validate([
             'gedung_id' => 'required',
             'nama_kelas' => 'required',
             'keterangan' => 'nullable'
         ]);
+
+        $gedung = Gedung::findOrFail(
+    $request->gedung_id
+);
+
+if (
+    $gedung->fakultas_id
+    != auth()->user()->fakultas_id
+){
+    abort(403);
+}
 
         $kela->update([
             'gedung_id' => $request->gedung_id,
@@ -122,11 +188,21 @@ class KelasController extends Controller
     */
 
     public function destroy(Kelas $kela)
-    {
-        $kela->delete();
-
-        return redirect()
-            ->route('kelas.index')
-            ->with('success', 'Data kelas berhasil dihapus');
+{
+    if (
+        $kela->gedung->fakultas_id
+        != auth()->user()->fakultas_id
+    ){
+        abort(403);
     }
+
+    $kela->delete();
+
+    return redirect()
+        ->route('kelas.index')
+        ->with(
+            'success',
+            'Data kelas berhasil dihapus'
+        );
+}
 }
