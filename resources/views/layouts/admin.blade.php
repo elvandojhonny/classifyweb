@@ -310,92 +310,64 @@ img{
 
 @media (max-width:768px){
 
-    .main-content{
-        padding:80px 15px 20px;
-    }
-
     .page-topbar{
-        display:flex !important;
         flex-direction:column;
-        align-items:flex-start !important;
-        gap:16px;
+        align-items:flex-start;
+        gap:18px;
     }
 
-    .page-topbar .d-flex{
+    .header-left{
         width:100%;
     }
 
-    .page-topbar .gap-3{
+    .header-left h3{
+        font-size:30px;
+    }
+
+    .header-right{
         width:100%;
-        justify-content:space-between;
+        justify-content:flex-start;
     }
 
     .profile-user{
-        width:42px;
-        height:42px;
-        font-size:14px;
+        width:48px;
+        height:48px;
+        font-size:16px;
     }
 
-    .card-body{
-        padding:16px;
-    }
-
-    .btn{
-        width:auto;
-    }
-
-    table{
-        min-width:700px;
-    }
-
-    .d-flex.gap-2{
-        flex-wrap:wrap;
-    }
 }
 
 /* =========================
     SMALL PHONE
 ========================= */
 
-@media (max-width:576px){
-
-    .sidebar{
-        width:260px;
-    }
-
-    .logo{
-        font-size:24px;
-    }
+@media (max-width:768px){
 
     .page-topbar{
-        padding:16px;
+        flex-direction:column;
+        align-items:flex-start;
+        gap:18px;
     }
 
-    .page-topbar h3{
-        font-size:20px;
+    .header-left{
+        width:100%;
     }
 
-    .page-topbar p{
-        font-size:13px;
+    .header-left h3{
+        font-size:30px;
     }
 
-    .main-content{
-        padding:75px 12px 15px;
+    .header-right{
+        width:100%;
+        justify-content:flex-start;
     }
 
     .profile-user{
-        width:38px;
-        height:38px;
-        font-size:13px;
+        width:48px;
+        height:48px;
+        font-size:16px;
     }
 
-    .card-body{
-        padding:14px;
-    }
-
-    .table{
-        font-size:14px;
-    }
 }
 
 /* RESPONSIVE GLOBAL */
@@ -410,30 +382,115 @@ img{
     height:auto;
 }
 
-@media(max-width:768px){
-
-    .main-content{
-        padding:80px 15px 20px;
-    }
+@media (max-width:768px){
 
     .page-topbar{
         flex-direction:column;
-        align-items:flex-start !important;
-        gap:15px;
+        align-items:flex-start;
+        gap:18px;
     }
 
-    .page-topbar .d-flex{
+    .header-left{
         width:100%;
-        justify-content:space-between;
     }
 
-    .btn{
-        min-height:44px;
+    .header-left h3{
+        font-size:30px;
     }
 
-    .form-control,
-    .form-select{
-        min-height:44px;
+    .header-right{
+        width:100%;
+        justify-content:flex-start;
+    }
+
+    .profile-user{
+        width:48px;
+        height:48px;
+        font-size:16px;
+    }
+
+}
+
+@media (max-width:992px){
+
+    .page-header-content{
+        padding-left:65px;
+    }
+
+}
+
+.page-topbar{
+    background:white;
+    border-radius:24px;
+    padding:24px 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.header-left h3{
+    margin:0;
+    font-size:32px;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.header-left p{
+    margin-top:6px;
+    margin-bottom:0;
+    color:#64748b;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.profile-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.profile-info strong{
+    color:#0f172a;
+}
+
+.profile-info small{
+    color:#64748b;
+}
+
+/* Admin User Panel */
+
+.page-section{
+    margin-bottom:24px;
+}
+
+.page-section h2{
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.page-section p{
+    color:#64748b;
+    margin-bottom:0;
+}
+
+@media(max-width:768px){
+
+    .page-section h2{
+        font-size:18px;
+    }
+
+    .page-section p{
+        font-size:13px;
+    }
+
+    .page-section{
+        margin-bottom:16px;
     }
 }
 
@@ -586,50 +643,47 @@ img{
 <div class="main-content">
 
     <!-- TOPBAR -->
-    <div class="page-topbar d-flex justify-content-between align-items-center">
+    <div class="page-topbar">
 
-        <div>
+    <div class="header-left">
 
-            <h3>@yield('page-title')</h3>
+        <h3>@yield('page-title')</h3>
 
-            <p>
-                Sistem Manajemen Peminjaman Ruangan
-            </p>
+        <p>
+            Sistem Manajemen Peminjaman Ruangan
+        </p>
 
+    </div>
+
+    <div class="header-right">
+
+        <div class="profile-user">
+            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
         </div>
 
-        <div class="d-flex align-items-center gap-3">
+        <div class="profile-info">
 
-            <div class="text-end">
-                <strong>{{ auth()->user()->name }}</strong><br>
+            <strong>
+                {{ auth()->user()->name }}
+            </strong>
+
+            <small>
+
                 @if(auth()->user()->role == 'superadmin')
+                    Super Admin
+                @elseif(auth()->user()->role == 'admin')
+                    Admin Fakultas
+                @else
+                    User
+                @endif
 
-    <small class="text-muted">
-        Super Admin
-    </small>
-
-@elseif(auth()->user()->role == 'admin')
-
-    <small class="text-muted">
-        Admin Fakultas
-    </small>
-
-@else
-
-    <small class="text-muted">
-        User
-    </small>
-
-@endif
-            </div>
-
-            <div class="profile-user">
-                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
-            </div>
+            </small>
 
         </div>
 
     </div>
+
+</div>
 
     <!-- ALERT -->
     @if(session('success'))
