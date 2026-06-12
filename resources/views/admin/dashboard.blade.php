@@ -13,16 +13,16 @@
     ========================== */
 
     .stat-card{
-        background: white;
-        border-radius: 24px;
-        padding: 24px;
-        position: relative;
-        overflow: hidden;
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-        transition: 0.3s ease;
-        height: 100%;
-    }
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+    min-height: 180px;
+}
 
     .stat-card:hover{
         transform: translateY(-5px);
@@ -190,23 +190,32 @@
 
 @media (max-width:576px){
 
+    .row.g-4{
+        --bs-gutter-x: 12px;
+        --bs-gutter-y: 12px;
+    }
+
     .stat-card{
-        padding:18px;
+        padding:16px;
+        border-radius:18px;
+        min-height:140px;
     }
 
     .stat-icon{
-        width:50px;
-        height:50px;
-        font-size:20px;
-        border-radius:14px;
+        width:42px;
+        height:42px;
+        font-size:18px;
+        border-radius:12px;
     }
 
     .stat-title{
-        font-size:13px;
+        font-size:12px;
+        margin-top:12px;
     }
 
     .stat-number{
-        font-size:28px;
+        font-size:24px;
+        margin-top:6px;
     }
 
     .content-card{
@@ -241,7 +250,7 @@
 <div class="row g-4">
 
     <!-- FAKULTAS -->
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
 
         <div class="stat-card">
 
@@ -262,7 +271,7 @@
     </div>
 
     <!-- GEDUNG -->
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
 
         <div class="stat-card">
 
@@ -283,7 +292,7 @@
     </div>
 
     <!-- KELAS -->
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
 
         <div class="stat-card">
 
@@ -304,7 +313,7 @@
     </div>
 
     <!-- USER -->
-    <div class="col-md-3">
+    <div class="col-6 col-md-3">
 
         <div class="stat-card">
 
@@ -333,7 +342,7 @@
 <div class="row">
 
     <!-- AKTIVITAS -->
-    <div class="col-md-8">
+    <div class="col-12 col-lg-8">
 
         <div class="content-card">
 
@@ -419,7 +428,7 @@
 
     </div>
 
-    <div class="col-md-4">
+    <div class="col-12 col-lg-4">
 
     <!-- INFORMASI SISTEM -->
     <div class="content-card">
