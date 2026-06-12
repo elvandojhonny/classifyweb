@@ -45,15 +45,16 @@ body{
     top:15px;
     left:15px;
     z-index:1200;
-    width:46px;
-    height:46px;
+    width:52px;
+    height:52px;
     border:none;
-    border-radius:12px;
+    border-radius:16px;
     background:#4f46e5;
     color:white;
-    font-size:22px;
+    font-size:24px;
     display:none;
-    box-shadow:0 5px 18px rgba(0,0,0,.15);
+    box-shadow:0 8px 24px rgba(79,70,229,.35);
+    transition:.3s ease;
 }
 
 /* =========================
@@ -443,9 +444,9 @@ img{
 <body>
 
     <!-- MOBILE TOGGLE -->
-<button class="mobile-menu-btn d-lg-none"
-        type="button"
-        onclick="toggleSidebar()">
+<button id="mobileToggle"
+        class="mobile-menu-btn d-lg-none"
+        type="button">
     <i class="bi bi-list"></i>
 </button>
 
@@ -660,23 +661,36 @@ img{
 
 const sidebar = document.querySelector('.sidebar');
 const overlay = document.querySelector('.sidebar-overlay');
+const mobileToggle = document.getElementById('mobileToggle');
 
-function toggleSidebar() {
-    sidebar.classList.toggle('show');
-    overlay.classList.toggle('show');
+function openSidebar(){
+
+    sidebar.classList.add('show');
+    overlay.classList.add('show');
+
+    if(window.innerWidth <= 992){
+        mobileToggle.style.left = '220px';
+    }
 }
 
-function closeSidebar() {
+function closeSidebar(){
+
     sidebar.classList.remove('show');
     overlay.classList.remove('show');
+
+    mobileToggle.style.left = '15px';
 }
 
-window.addEventListener('resize', () => {
+function toggleSidebar(){
 
-    if(window.innerWidth > 992){
+    if(sidebar.classList.contains('show')){
         closeSidebar();
+    }else{
+        openSidebar();
     }
-});
+}
+
+mobileToggle.addEventListener('click', toggleSidebar);
 
 overlay.addEventListener('click', closeSidebar);
 
@@ -687,7 +701,17 @@ document.querySelectorAll('.sidebar a').forEach(link => {
         if(window.innerWidth <= 992){
             closeSidebar();
         }
+
     });
+
+});
+
+window.addEventListener('resize', () => {
+
+    if(window.innerWidth > 992){
+        closeSidebar();
+    }
+
 });
 
 </script>
