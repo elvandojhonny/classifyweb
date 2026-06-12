@@ -158,9 +158,9 @@
             </label>
 
             <input type="text"
-                   name="ruang_kelas"
-                   value="{{ old('ruang_kelas') }}"
-                   class="form-control @error('ruang_kelas') is-invalid @enderror"
+                   name="nama_kelas"
+                   value="{{ old('nama_kelas') }}"
+                   class="form-control @error('nama_kelas') is-invalid @enderror"
                    placeholder="Contoh: Lantai 1, Ruang 101">
 
             @error('ruang_kelas')
