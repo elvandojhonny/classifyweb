@@ -155,6 +155,83 @@
         color: #d97706;
     }
 
+    /* =========================
+    MOBILE RESPONSIVE
+========================= */
+
+.announcement-item{
+    word-break: break-word;
+}
+
+@media (max-width:768px){
+
+    .content-card{
+        padding:18px;
+    }
+
+    .activity-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .badge-modern{
+        align-self:flex-start;
+    }
+
+    .activity-scroll{
+        max-height:none;
+    }
+
+    .stat-number{
+        font-size:30px;
+    }
+}
+
+@media (max-width:576px){
+
+    .stat-card{
+        padding:18px;
+    }
+
+    .stat-icon{
+        width:50px;
+        height:50px;
+        font-size:20px;
+        border-radius:14px;
+    }
+
+    .stat-title{
+        font-size:13px;
+    }
+
+    .stat-number{
+        font-size:28px;
+    }
+
+    .content-card{
+        padding:16px;
+    }
+
+    .content-card h5{
+        font-size:17px;
+    }
+
+    .content-card .d-flex{
+        flex-direction:column;
+        align-items:flex-start !important;
+        gap:6px;
+    }
+
+    .activity-item strong{
+        font-size:14px;
+    }
+
+    .activity-item .small{
+        font-size:12px;
+    }
+}
+
 </style>
 
 <!-- =========================
@@ -342,48 +419,98 @@
 
     </div>
 
-    <!-- INFO -->
     <div class="col-md-4">
 
-        <div class="content-card">
+    <!-- INFORMASI SISTEM -->
+    <div class="content-card">
 
-            <h5 class="mb-4">
-                Informasi Sistem
-            </h5>
+    <h5 class="mb-4">
+        Informasi Sistem
+    </h5>
 
-            <div class="mb-4">
+    <div class="mb-4">
+        <strong>Total Aktivitas</strong><br>
+        <small class="text-muted">
+            {{ $totalAktivitas }} aktivitas
+        </small>
+    </div>
 
-                <strong>Status Server</strong><br>
+    <div class="mb-4">
+        <strong>Status Sistem</strong><br>
 
-                <small class="text-success">
-                    Server Online
-                </small>
+        @if($statusSistem)
 
-            </div>
+            <small class="text-success">
+                <i class="bi bi-circle-fill"></i>
+                Sistem Aktif
+            </small>
 
-            <div class="mb-4">
+        @else
 
-                <strong>Total Aktivitas</strong><br>
+            <small class="text-danger">
+                <i class="bi bi-circle-fill"></i>
+                Maintenance
+            </small>
 
-                <small class="text-muted">
-                    {{ $aktivitas->count() }} aktivitas terbaru
-                </small>
-
-            </div>
-
-            <div>
-
-                <strong>Role Login</strong><br>
-
-                <small class="text-primary">
-                    Administrator
-                </small>
-
-            </div>
-
-        </div>
+        @endif
 
     </div>
+
+    <div>
+        <strong>Jam Operasional</strong><br>
+        <small class="text-primary">
+            {{ $jamOperasional }}
+        </small>
+    </div>
+
+</div>
+
+    <!-- PENGUMUMAN -->
+    <div class="content-card mt-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0">
+                Pengumuman Kampus
+            </h5>
+
+            <small class="text-muted">
+                Terbaru
+            </small>
+        </div>
+
+        @forelse($pengumuman as $item)
+
+            <div class="announcement-item mb-3 pb-3 border-bottom">
+
+                <strong class="d-block">
+                    {{ $item->judul }}
+                </strong>
+
+                <small class="text-muted">
+                    {{ Str::limit($item->isi, 100) }}
+                </small>
+
+                <div class="small text-secondary mt-2">
+                    {{ $item->created_at->format('d M Y') }}
+                </div>
+
+            </div>
+
+        @empty
+
+            <div class="text-center py-3">
+
+                <small class="text-muted">
+                    Belum ada pengumuman.
+                </small>
+
+            </div>
+
+        @endforelse
+
+    </div>
+
+</div>
 
 </div>
 
