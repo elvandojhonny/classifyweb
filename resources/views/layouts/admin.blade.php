@@ -16,159 +16,441 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet">
 
-    <style>
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-        }
+<style>
 
-        body{
-            font-family:'Inter',sans-serif;
-            background:#f1f5f9;
-            overflow-x:hidden;
-        }
+    *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        /* =========================
-            SIDEBAR
-        ========================== */
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+}
 
-        .sidebar{
-            width:240px;
-            height:100vh;
-            position:fixed;
-            left:0;
-            top:0;
-            background:#0f172a;
-            padding:28px 18px;
-            color:white;
-        }
+body{
+    font-family:'Inter',sans-serif;
+    background:#f1f5f9;
+}
 
-        .logo{
-            font-size:28px;
-            font-weight:700;
-            margin-bottom:40px;
-        }
+/* =========================
+    MOBILE BUTTON
+========================= */
 
-        .menu-title{
-            color:#64748b;
-            font-size:12px;
-            margin-bottom:12px;
-            text-transform:uppercase;
-            letter-spacing:1px;
-        }
+.mobile-menu-btn{
+    position:fixed;
+    top:15px;
+    left:15px;
+    z-index:1200;
+    width:46px;
+    height:46px;
+    border:none;
+    border-radius:12px;
+    background:#4f46e5;
+    color:white;
+    font-size:22px;
+    display:none;
+    box-shadow:0 5px 18px rgba(0,0,0,.15);
+}
 
-        .sidebar a{
-            display:flex;
-            align-items:center;
-            gap:12px;
-            padding:14px 16px;
-            border-radius:14px;
-            margin-bottom:8px;
-            text-decoration:none;
-            color:#cbd5e1;
-            transition:0.3s ease;
-            font-size:15px;
-            font-weight:500;
-        }
+/* =========================
+    OVERLAY
+========================= */
 
-        .sidebar a:hover{
-            background:#1e293b;
-            color:white;
-        }
+.sidebar-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:998;
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+}
 
-        .sidebar .active{
-            background:#4f46e5;
-            color:white;
-            box-shadow:0 10px 24px rgba(79,70,229,0.25);
-        }
+.sidebar-overlay.show{
+    opacity:1;
+    visibility:visible;
+}
 
-        .sidebar hr{
-            border-color:rgba(255,255,255,0.08);
-            margin:24px 0;
-        }
+/* =========================
+    SIDEBAR
+========================= */
 
-        .logout-btn{
-            color:#f87171 !important;
-        }
+.sidebar{
+    width:240px;
+    height:100vh;
+    position:fixed;
+    left:0;
+    top:0;
+    background:#0f172a;
+    padding:28px 18px;
+    color:white;
+    overflow-y:auto;
+    z-index:999;
+}
 
-        .logout-btn:hover{
-            background:rgba(239,68,68,0.12) !important;
-        }
+.sidebar::-webkit-scrollbar{
+    width:5px;
+}
 
-        /* =========================
-            MAIN CONTENT
-        ========================== */
+.sidebar::-webkit-scrollbar-thumb{
+    background:#334155;
+    border-radius:20px;
+}
 
-        .main-content{
-            margin-left:240px;
-            padding:28px;
-            min-height:100vh;
-        }
+.logo{
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:40px;
+}
 
-        /* =========================
-            TOPBAR
-        ========================== */
+.menu-title{
+    color:#64748b;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:12px;
+}
 
-        .page-topbar{
-            background:white;
-            border-radius:22px;
-            padding:22px 26px;
-            margin-bottom:28px;
-            box-shadow:0 4px 14px rgba(0,0,0,0.05);
-        }
+.sidebar a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    border-radius:14px;
+    margin-bottom:8px;
+    text-decoration:none;
+    color:#cbd5e1;
+    transition:.25s;
+    font-size:15px;
+    font-weight:500;
+}
 
-        .page-topbar h3{
-            margin:0;
-            font-weight:700;
-            color:#0f172a;
-        }
+.sidebar a:hover{
+    background:#1e293b;
+    color:white;
+}
 
-        .page-topbar p{
-            margin:4px 0 0;
-            color:#64748b;
-            font-size:14px;
-        }
+.sidebar .active{
+    background:#4f46e5;
+    color:white;
+    box-shadow:0 10px 24px rgba(79,70,229,.25);
+}
 
-        .profile-user{
-            width:45px;
-            height:45px;
-            border-radius:50%;
-            background:#4f46e5;
-            color:white;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-weight:700;
-        }
+.sidebar hr{
+    border-color:rgba(255,255,255,.08);
+    margin:24px 0;
+}
 
-        /* =========================
-            ALERT
-        ========================== */
+.logout-btn{
+    color:#f87171 !important;
+}
 
-        .alert-modern{
-            border:none;
-            border-radius:16px;
-            padding:14px 18px;
-            margin-bottom:20px;
-        }
+.logout-btn:hover{
+    background:rgba(239,68,68,.12) !important;
+}
 
-        .alert-success-modern{
-            background:rgba(34,197,94,0.12);
-            color:#16a34a;
-        }
+/* =========================
+    MAIN CONTENT
+========================= */
 
-        .alert-danger-modern{
-            background:rgba(239,68,68,0.12);
-            color:#dc2626;
-        }
+.main-content{
+    margin-left:240px;
+    padding:28px;
+    min-height:100vh;
+}
 
-    </style>
+/* =========================
+    TOPBAR
+========================= */
+
+.page-topbar{
+    background:white;
+    border-radius:22px;
+    padding:22px 26px;
+    margin-bottom:28px;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.page-topbar h3{
+    margin:0;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.page-topbar p{
+    margin-top:4px;
+    color:#64748b;
+    font-size:14px;
+}
+
+.profile-user{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#4f46e5;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+}
+
+/* =========================
+    ALERT
+========================= */
+
+.alert-modern{
+    border:none;
+    border-radius:16px;
+    padding:14px 18px;
+    margin-bottom:20px;
+}
+
+.alert-success-modern{
+    background:rgba(34,197,94,.12);
+    color:#16a34a;
+}
+
+.alert-danger-modern{
+    background:rgba(239,68,68,.12);
+    color:#dc2626;
+}
+
+/* =========================
+    GLOBAL RESPONSIVE
+========================= */
+
+.card{
+    border:none;
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.card-body{
+    padding:20px;
+}
+
+.btn{
+    min-height:44px;
+}
+
+.form-control,
+.form-select{
+    min-height:48px;
+}
+
+textarea.form-control{
+    min-height:120px;
+}
+
+.table-responsive{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table{
+    margin-bottom:0;
+    white-space:nowrap;
+}
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+.row{
+    margin-left:0;
+    margin-right:0;
+}
+
+/* =========================
+    TABLET
+========================= */
+
+@media (max-width:992px){
+
+    .mobile-menu-btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s ease;
+        width:280px;
+    }
+
+    .sidebar.show{
+        transform:translateX(0);
+    }
+
+    .main-content{
+        margin-left:0;
+        padding:80px 18px 20px;
+    }
+
+    .page-topbar{
+        padding:18px;
+    }
+
+    .page-topbar h3{
+        font-size:22px;
+    }
+}
+
+/* =========================
+    MOBILE
+========================= */
+
+@media (max-width:768px){
+
+    .main-content{
+        padding:80px 15px 20px;
+    }
+
+    .page-topbar{
+        display:flex !important;
+        flex-direction:column;
+        align-items:flex-start !important;
+        gap:16px;
+    }
+
+    .page-topbar .d-flex{
+        width:100%;
+    }
+
+    .page-topbar .gap-3{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .profile-user{
+        width:42px;
+        height:42px;
+        font-size:14px;
+    }
+
+    .card-body{
+        padding:16px;
+    }
+
+    .btn{
+        width:auto;
+    }
+
+    table{
+        min-width:700px;
+    }
+
+    .d-flex.gap-2{
+        flex-wrap:wrap;
+    }
+}
+
+/* =========================
+    SMALL PHONE
+========================= */
+
+@media (max-width:576px){
+
+    .sidebar{
+        width:260px;
+    }
+
+    .logo{
+        font-size:24px;
+    }
+
+    .page-topbar{
+        padding:16px;
+    }
+
+    .page-topbar h3{
+        font-size:20px;
+    }
+
+    .page-topbar p{
+        font-size:13px;
+    }
+
+    .main-content{
+        padding:75px 12px 15px;
+    }
+
+    .profile-user{
+        width:38px;
+        height:38px;
+        font-size:13px;
+    }
+
+    .card-body{
+        padding:14px;
+    }
+
+    .table{
+        font-size:14px;
+    }
+}
+
+/* RESPONSIVE GLOBAL */
+
+.table-responsive{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+img{
+    max-width:100%;
+    height:auto;
+}
+
+@media(max-width:768px){
+
+    .main-content{
+        padding:80px 15px 20px;
+    }
+
+    .page-topbar{
+        flex-direction:column;
+        align-items:flex-start !important;
+        gap:15px;
+    }
+
+    .page-topbar .d-flex{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .btn{
+        min-height:44px;
+    }
+
+    .form-control,
+    .form-select{
+        min-height:44px;
+    }
+}
+
+</style>
 
 </head>
 
 <body>
+
+    <!-- MOBILE TOGGLE -->
+<button class="mobile-menu-btn d-lg-none"
+        type="button"
+        onclick="toggleSidebar()">
+    <i class="bi bi-list"></i>
+</button>
+
+<div class="sidebar-overlay"
+     onclick="toggleSidebar()"></div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -373,6 +655,42 @@
     @yield('content')
 
 </div>
+
+<script>
+
+const sidebar = document.querySelector('.sidebar');
+const overlay = document.querySelector('.sidebar-overlay');
+
+function toggleSidebar() {
+    sidebar.classList.toggle('show');
+    overlay.classList.toggle('show');
+}
+
+function closeSidebar() {
+    sidebar.classList.remove('show');
+    overlay.classList.remove('show');
+}
+
+window.addEventListener('resize', () => {
+
+    if(window.innerWidth > 992){
+        closeSidebar();
+    }
+});
+
+overlay.addEventListener('click', closeSidebar);
+
+document.querySelectorAll('.sidebar a').forEach(link => {
+
+    link.addEventListener('click', () => {
+
+        if(window.innerWidth <= 992){
+            closeSidebar();
+        }
+    });
+});
+
+</script>
 
 </body>
 </html>
