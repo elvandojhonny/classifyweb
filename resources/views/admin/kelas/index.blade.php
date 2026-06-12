@@ -193,12 +193,24 @@
                 {{ $item->nama_kelas }}
             </div>
 
-            <!-- GEDUNG -->
+            <!-- GEDUNG + FAKULTAS -->
             <div class="kelas-subtitle">
 
-                <i class="bi bi-building"></i>
+                <div class="mb-1">
 
-                {{ $item->gedung->nama_gedung ?? '-' }}
+                    <i class="bi bi-building"></i>
+
+                    {{ $item->gedung->nama_gedung ?? '-' }}
+
+                </div>
+
+                <div>
+
+                    <i class="bi bi-bank"></i>
+
+                    {{ $item->gedung->fakultas->nama_fakultas ?? '-' }}
+
+                </div>
 
             </div>
 

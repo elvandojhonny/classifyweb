@@ -89,12 +89,11 @@
         }
 
         .logout-btn{
-            margin-top: 10px;
-            color: #f87171 !important;
+            color:#f87171 !important;
         }
 
         .logout-btn:hover{
-            background: rgba(239,68,68,0.12) !important;
+            background:rgba(239,68,68,0.12) !important;
         }
 
         /* =========================
@@ -174,14 +173,15 @@
     @csrf
 
     <button type="submit"
-            class="border-0 bg-transparent text-start text-danger w-100">
+            class="logout-btn border-0 bg-transparent w-100 text-start">
 
+        <i class="bi bi-box-arrow-right"></i>
         Logout
 
     </button>
 
 </form>
-</div>
+</div> 
 
 <!-- CONTENT -->
 <div class="main-content">

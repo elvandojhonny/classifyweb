@@ -84,27 +84,41 @@ class PeminjamanController extends Controller
     // ADMIN - LIST DATA
     // =========================
     public function index()
+{
+    if(auth()->user()->role == 'superadmin')
     {
         $data = Peminjaman::with(
-        'user',
-        'kelas.gedung.fakultas'
-    )
-
-    ->whereHas('kelas.gedung', function ($q){
-
-        $q->where(
-            'fakultas_id',
-            auth()->user()->fakultas_id
-        );
-
-    })
-
-    ->latest()
-
-    ->get();
-
-        return view('admin.peminjaman.index', compact('data'));
+            'user',
+            'kelas.gedung.fakultas'
+        )
+        ->latest()
+        ->get();
     }
+    else
+    {
+        $data = Peminjaman::with(
+            'user',
+            'kelas.gedung.fakultas'
+        )
+
+        ->whereHas('kelas.gedung', function ($q){
+
+            $q->where(
+                'fakultas_id',
+                auth()->user()->fakultas_id
+            );
+
+        })
+
+        ->latest()
+        ->get();
+    }
+
+    return view(
+        'admin.peminjaman.index',
+        compact('data')
+    );
+}
 
     // =========================
     // ADMIN - APPROVE
@@ -115,6 +129,8 @@ class PeminjamanController extends Controller
     ->findOrFail($id);
 
 if(
+    auth()->user()->role != 'superadmin'
+    &&
     $data->kelas->gedung->fakultas_id
     != auth()->user()->fakultas_id
 ){
@@ -137,6 +153,8 @@ if(
     ->findOrFail($id);
 
 if(
+    auth()->user()->role != 'superadmin'
+    &&
     $data->kelas->gedung->fakultas_id
     != auth()->user()->fakultas_id
 ){

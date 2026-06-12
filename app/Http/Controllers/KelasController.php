@@ -16,20 +16,28 @@ class KelasController extends Controller
 
     public function index()
     {
-        $kelas = Kelas::with('gedung')
+        if (auth()->user()->role == 'superadmin') {
 
-    ->whereHas('gedung', function ($q) {
+            $kelas = Kelas::with('gedung.fakultas')
+                ->latest()
+                ->get();
 
-        $q->where(
-            'fakultas_id',
-            auth()->user()->fakultas_id
-        );
+        } else {
 
-    })
+            $kelas = Kelas::with('gedung.fakultas')
 
-    ->latest()
+                ->whereHas('gedung', function ($q) {
 
-    ->get();
+                    $q->where(
+                        'fakultas_id',
+                        auth()->user()->fakultas_id
+                    );
+
+                })
+
+                ->latest()
+                ->get();
+        }
 
         return view('admin.kelas.index', compact('kelas'));
     }
@@ -44,18 +52,17 @@ class KelasController extends Controller
     {
         $kelas = Kelas::with('gedung.fakultas')
 
-    ->whereHas('gedung', function ($q) {
+            ->whereHas('gedung', function ($q) {
 
-        $q->where(
-            'fakultas_id',
-            auth()->user()->fakultas_id
-        );
+                $q->where(
+                    'fakultas_id',
+                    auth()->user()->fakultas_id
+                );
 
-    })
+            })
 
-    ->latest()
-
-    ->get();
+            ->latest()
+            ->get();
 
         return view('user.kelas.index', compact('kelas'));
     }
@@ -67,14 +74,23 @@ class KelasController extends Controller
     */
 
     public function create()
-    {
-        $gedung = Gedung::where(
-    'fakultas_id',
-    auth()->user()->fakultas_id
-)->get();
+{
+    if (auth()->user()->role == 'superadmin') {
 
-        return view('admin.kelas.create', compact('gedung'));
+        $gedung = Gedung::with('fakultas')->get();
+
+    } else {
+
+        $gedung = Gedung::with('fakultas')
+            ->where(
+                'fakultas_id',
+                auth()->user()->fakultas_id
+            )
+            ->get();
     }
+
+    return view('admin.kelas.create', compact('gedung'));
+}
 
     /*
     |--------------------------------------------------------------------------
@@ -91,15 +107,16 @@ class KelasController extends Controller
         ]);
 
         $gedung = Gedung::findOrFail(
-    $request->gedung_id
-);
+            $request->gedung_id
+        );
 
-if (
-    $gedung->fakultas_id
-    != auth()->user()->fakultas_id
-){
-    abort(403);
-}
+        if (
+            auth()->user()->role != 'superadmin'
+            &&
+            $gedung->fakultas_id != auth()->user()->fakultas_id
+        ) {
+            abort(403);
+        }
 
         Kelas::create([
             'gedung_id' => $request->gedung_id,
@@ -120,17 +137,26 @@ if (
 
     public function edit(Kelas $kela)
     {
+        if (
+            auth()->user()->role != 'superadmin'
+            &&
+            $kela->gedung->fakultas_id
+            != auth()->user()->fakultas_id
+        ) {
+            abort(403);
+        }
 
-    if (
-    $kela->gedung->fakultas_id
-    != auth()->user()->fakultas_id
-){
-    abort(403);
-}
-        $gedung = Gedung::where(
-    'fakultas_id',
-    auth()->user()->fakultas_id
-)->get();
+        if (auth()->user()->role == 'superadmin') {
+
+            $gedung = Gedung::with('fakultas')->get();
+
+        } else {
+
+            $gedung = Gedung::where(
+                'fakultas_id',
+                auth()->user()->fakultas_id
+            )->get();
+        }
 
         return view('admin.kelas.edit', [
             'kelas' => $kela,
@@ -147,11 +173,13 @@ if (
     public function update(Request $request, Kelas $kela)
     {
         if (
-    $kela->gedung->fakultas_id
-    != auth()->user()->fakultas_id
-){
-    abort(403);
-}
+            auth()->user()->role != 'superadmin'
+            &&
+            $kela->gedung->fakultas_id
+            != auth()->user()->fakultas_id
+        ) {
+            abort(403);
+        }
 
         $request->validate([
             'gedung_id' => 'required',
@@ -160,15 +188,17 @@ if (
         ]);
 
         $gedung = Gedung::findOrFail(
-    $request->gedung_id
-);
+            $request->gedung_id
+        );
 
-if (
-    $gedung->fakultas_id
-    != auth()->user()->fakultas_id
-){
-    abort(403);
-}
+        if (
+            auth()->user()->role != 'superadmin'
+            &&
+            $gedung->fakultas_id
+            != auth()->user()->fakultas_id
+        ) {
+            abort(403);
+        }
 
         $kela->update([
             'gedung_id' => $request->gedung_id,
@@ -188,21 +218,23 @@ if (
     */
 
     public function destroy(Kelas $kela)
-{
-    if (
-        $kela->gedung->fakultas_id
-        != auth()->user()->fakultas_id
-    ){
-        abort(403);
+    {
+        if (
+            auth()->user()->role != 'superadmin'
+            &&
+            $kela->gedung->fakultas_id
+            != auth()->user()->fakultas_id
+        ) {
+            abort(403);
+        }
+
+        $kela->delete();
+
+        return redirect()
+            ->route('kelas.index')
+            ->with(
+                'success',
+                'Data kelas berhasil dihapus'
+            );
     }
-
-    $kela->delete();
-
-    return redirect()
-        ->route('kelas.index')
-        ->with(
-            'success',
-            'Data kelas berhasil dihapus'
-        );
-}
 }

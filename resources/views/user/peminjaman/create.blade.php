@@ -227,7 +227,7 @@
                     <textarea name="keperluan"
                               rows="4"
                               class="form-control"
-                              placeholder="Masukkan keperluan peminjaman..."
+                              placeholder="Mata kuliah, Program studi, Seminar, dll"
                               required></textarea>
 
                 </div>

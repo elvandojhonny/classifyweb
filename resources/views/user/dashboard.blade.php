@@ -353,103 +353,68 @@
 
     </div>
 
-    <!-- CONTENT -->
-    <div class="row">
+   <!-- CONTENT -->
+<div class="row mt-4">
 
-        <!-- LEFT SIDE -->
-        <div class="col-md-8">
+    <!-- LEFT SIDE -->
+    <div class="col-lg-8">
 
-            <!-- AKTIVITAS -->
-            <div class="content-card">
+        <!-- AKTIVITAS -->
+        <div class="content-card">
 
-                <h5>Aktivitas Peminjaman</h5>
+            <h5>Aktivitas Peminjaman</h5>
 
-                <div class="activity-scroll">
+            <div class="activity-scroll">
 
-                    @forelse($aktivitas as $item)
+                @forelse($aktivitas as $item)
 
-                        <div class="activity-item">
+                    <div class="activity-item">
 
-                            <div>
+                        <div>
 
-                                <strong>
-                                    {{ $item->kelas->nama_kelas }}
-                                </strong><br>
+                            <strong>
+                                {{ $item->kelas->nama_kelas }}
+                            </strong><br>
 
-                                <small class="text-muted">
+                            <small class="text-muted">
 
-                                    {{ $item->tanggal }}
-                                    •
-                                    {{ $item->jam_mulai }}
-                                    -
-                                    {{ $item->jam_selesai }}
+                                {{ $item->tanggal }}
+                                •
+                                {{ $item->jam_mulai }}
+                                -
+                                {{ $item->jam_selesai }}
 
-                                </small>
-
-                            </div>
-
-                            @if($item->status == 'disetujui')
-
-                                <span class="status-badge status-success">
-                                    Disetujui
-                                </span>
-
-                            @elseif($item->status == 'ditolak')
-
-                                <span class="status-badge status-danger">
-                                    Ditolak
-                                </span>
-
-                            @else
-
-                                <span class="status-badge status-warning">
-                                    Pending
-                                </span>
-
-                            @endif
+                            </small>
 
                         </div>
 
-                    @empty
+                        @if($item->status == 'disetujui')
 
-                        <div class="text-center py-4 text-muted">
+                            <span class="status-badge status-success">
+                                Disetujui
+                            </span>
 
-                            Belum ada aktivitas peminjaman
+                        @elseif($item->status == 'ditolak')
 
-                        </div>
+                            <span class="status-badge status-danger">
+                                Ditolak
+                            </span>
 
-                    @endforelse
+                        @else
 
-                </div>
+                            <span class="status-badge status-warning">
+                                Pending
+                            </span>
 
-            </div>
-
-            <!-- PENGUMUMAN -->
-            <div class="content-card">
-
-                <h5>Pengumuman</h5>
-
-                @forelse($pengumuman as $item)
-
-                    <div class="announcement-item">
-
-                        <strong>
-                            {{ $item->judul }}
-                        </strong><br>
-
-                        <small>
-
-                            {{ $item->isi }}
-
-                        </small>
+                        @endif
 
                     </div>
 
                 @empty
 
-                    <div class="text-muted">
+                    <div class="text-center py-4 text-muted">
 
-                        Tidak ada pengumuman terbaru
+                        Belum ada aktivitas peminjaman
 
                     </div>
 
@@ -459,74 +424,89 @@
 
         </div>
 
-        <!-- RIGHT SIDE -->
-        <div class="col-md-4">
+        <!-- PENGUMUMAN -->
+        <div class="content-card">
 
-            <!-- INFORMASI -->
-            <div class="content-card">
+            <h5>Pengumuman</h5>
 
-                <h5>Informasi Sistem</h5>
+            @forelse($pengumuman as $item)
 
-                <!-- OPERASIONAL -->
-                <div class="mb-4">
+                <div class="announcement-item">
 
                     <strong>
-                        Jam Operasional
+                        {{ $item->judul }}
                     </strong><br>
 
-                    <small class="text-muted">
+                    <small>
 
-                        Senin - Sabtu<br>
-                        07:00 WIB - 19:00 WIB
+                        {{ $item->isi }}
 
                     </small>
 
                 </div>
 
-                <!-- STATUS -->
-                <div class="mb-4">
+            @empty
 
-                    <strong>
-                        Status Sistem
-                    </strong><br>
+                <div class="text-muted">
+
+                    Tidak ada pengumuman terbaru
+
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="col-lg-4">
+
+        <div class="content-card">
+
+            <h5 class="mb-4">
+                Informasi Sistem
+            </h5>
+
+            <div class="mb-4">
+
+                <strong>Total Aktivitas</strong><br>
+
+                <small class="text-muted">
+                    {{ $totalAktivitas ?? 0 }} aktivitas
+                </small>
+
+            </div>
+
+            <div class="mb-4">
+
+                <strong>Status Sistem</strong><br>
+
+                @if($statusSistem ?? true)
 
                     <small class="text-success">
-
-                        Sistem Berjalan Normal
-
+                        <i class="bi bi-circle-fill"></i>
+                        Sistem Aktif
                     </small>
 
-                </div>
+                @else
 
-                <!-- USER -->
-                <div class="mb-4">
-
-                    <strong>
-                        Program Studi
-                    </strong><br>
-
-                    <small class="text-muted">
-
-                        {{ auth()->user()->prodi }}
-
+                    <small class="text-danger">
+                        <i class="bi bi-circle-fill"></i>
+                        Maintenance
                     </small>
 
-                </div>
+                @endif
 
-                <!-- TOTAL -->
-                <div>
+            </div>
 
-                    <strong>
-                        Total Pengajuan Anda
-                    </strong><br>
+            <div>
 
-                    <small class="text-primary">
+                <strong>Jam Operasional</strong><br>
 
-                        {{ $totalPengajuan }} Pengajuan
-
-                    </small>
-
-                </div>
+                <small class="text-primary">
+                    {{ $jamOperasional ?? '07:30 - 21:00' }}
+                </small>
 
             </div>
 

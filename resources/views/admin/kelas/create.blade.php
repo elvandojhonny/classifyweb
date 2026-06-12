@@ -120,20 +120,19 @@
             <select name="gedung_id"
                     class="form-select @error('gedung_id') is-invalid @enderror">
 
-                <option value="">
-                    -- Pilih Gedung --
-                </option>
-
                 @foreach($gedung as $g)
 
-                    <option value="{{ $g->id }}"
-                        {{ old('gedung_id') == $g->id ? 'selected' : '' }}>
+    <option value="{{ $g->id }}"
+        {{ old('gedung_id') == $g->id ? 'selected' : '' }}>
 
-                        {{ $g->nama_gedung }}
+        {{ $g->nama_gedung }}
+        @if($g->fakultas)
+            - {{ $g->fakultas->nama_fakultas }}
+        @endif
 
-                    </option>
+    </option>
 
-                @endforeach
+@endforeach
 
             </select>
 
@@ -154,17 +153,17 @@
 
             <label class="form-label">
 
-                Nama Kelas
+                Ruang Kelas
 
             </label>
 
             <input type="text"
-                   name="nama_kelas"
-                   value="{{ old('nama_kelas') }}"
-                   class="form-control @error('nama_kelas') is-invalid @enderror"
-                   placeholder="Contoh: Lab Komputer 1">
+                   name="ruang_kelas"
+                   value="{{ old('ruang_kelas') }}"
+                   class="form-control @error('ruang_kelas') is-invalid @enderror"
+                   placeholder="Contoh: Lantai 1, Ruang 101">
 
-            @error('nama_kelas')
+            @error('ruang_kelas')
 
                 <div class="invalid-feedback">
 
@@ -187,7 +186,7 @@
 
             <textarea name="keterangan"
                       class="form-control @error('keterangan') is-invalid @enderror"
-                      placeholder="Contoh: Kapasitas 40 orang, tersedia AC dan Proyektor">{{ old('keterangan') }}</textarea>
+                      placeholder="Contoh: Kapasitas 100, AC, WIFI & Proyektor">{{ old('keterangan') }}</textarea>
 
             @error('keterangan')
 
