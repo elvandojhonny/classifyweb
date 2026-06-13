@@ -222,10 +222,20 @@ textarea.form-control{
 
             <!-- ALERT -->
 
+            <!-- ALERT -->
+
             @if(session('success'))
 
                 <div class="success-alert">
                     {{ session('success') }}
+                </div>
+
+            @endif
+
+            @if(session('error'))
+
+                <div class="error-alert">
+                    {{ session('error') }}
                 </div>
 
             @endif

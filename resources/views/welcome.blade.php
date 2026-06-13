@@ -307,6 +307,173 @@
 
         }
 
+        .schedule-card{
+    background:white;
+    border-radius:24px;
+    padding:22px;
+    height:100%;
+    border:1px solid #e2e8f0;
+    box-shadow:0 8px 20px rgba(0,0,0,.04);
+    transition:.3s;
+}
+
+.schedule-card:hover{
+    transform:translateY(-4px);
+}
+
+.schedule-time{
+    font-size:24px;
+    font-weight:700;
+    color:#4f46e5;
+}
+
+.schedule-room{
+    font-size:18px;
+    font-weight:700;
+    color:#0f172a;
+    margin-top:10px;
+}
+
+.schedule-info{
+    color:#64748b;
+    font-size:14px;
+    margin-top:4px;
+}
+
+.schedule-user{
+    margin-top:15px;
+    padding-top:15px;
+    border-top:1px solid #e2e8f0;
+}
+
+.schedule-status{
+    margin-top:15px;
+}
+
+.jadwal-card{
+    background:white;
+    border-radius:22px;
+    padding:20px;
+    border:1px solid #e2e8f0;
+    box-shadow:0 8px 20px rgba(0,0,0,.04);
+    height:100%;
+    transition:.3s;
+}
+
+.jadwal-card:hover{
+    transform:translateY(-4px);
+}
+
+.jadwal-title{
+    font-size:18px;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.jadwal-sub{
+    color:#64748b;
+    font-size:13px;
+}
+
+.jadwal-info{
+    margin-top:15px;
+}
+
+.jadwal-info div{
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.badge-pending{
+    background:#fef3c7;
+    color:#d97706;
+}
+
+.badge-disetujui{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.badge-ditolak{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.jadwal-wrapper{
+    background:white;
+    border-radius:24px;
+    border:1px solid #e2e8f0;
+    box-shadow:0 8px 24px rgba(0,0,0,.05);
+
+    max-height:420px;
+    overflow-y:auto;
+}
+
+.jadwal-wrapper::-webkit-scrollbar{
+    width:8px;
+}
+
+.jadwal-wrapper::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:20px;
+}
+
+.jadwal-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+
+    padding:18px 24px;
+    border-bottom:1px solid #e2e8f0;
+}
+
+.jadwal-row:last-child{
+    border-bottom:none;
+}
+
+.jadwal-left{
+    width:25%;
+}
+
+.jadwal-center{
+    width:40%;
+    font-size:14px;
+}
+
+.jadwal-right{
+    width:25%;
+    text-align:right;
+    font-size:14px;
+}
+
+.jadwal-title{
+    font-size:17px;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.jadwal-sub{
+    font-size:13px;
+    color:#64748b;
+}
+
+@media(max-width:768px){
+
+    .jadwal-row{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .jadwal-left,
+    .jadwal-center,
+    .jadwal-right{
+        width:100%;
+        text-align:left;
+    }
+
+}
+
     </style>
 </head>
 <body>
@@ -317,6 +484,60 @@
     use App\Models\User;
     use App\Models\Kelas;
     use App\Models\Peminjaman;
+
+    $peminjamanTerbaru = Peminjaman::with([
+    'user.fakultas',
+    'kelas.gedung'
+    ])
+    ->whereIn('status', ['pending','disetujui'])
+    ->orderBy('tanggal')
+    ->orderBy('jam_mulai')
+    ->take(12)
+    ->get();
+
+    $sedangDipakai = Peminjaman::with([
+    'user.fakultas',
+    'kelas.gedung'
+    ])
+    ->where('status','disetujui')
+    ->whereDate('tanggal', now())
+    ->where('jam_mulai','<=', now()->format('H:i:s'))
+    ->where('jam_selesai','>=', now()->format('H:i:s'))
+    ->get();
+
+    $jadwalHariIni = Peminjaman::with([
+    'user.fakultas',
+    'kelas.gedung.fakultas'
+    ])
+    ->whereIn('status', [
+        'pending',
+        'disetujui'
+    ])
+
+    ->where(function($q){
+
+        $q->where('tanggal', '>', now()->toDateString())
+
+        ->orWhere(function($qq){
+
+                $qq->where(
+                    'tanggal',
+                    now()->toDateString()
+                )
+
+                ->where(
+                    'jam_selesai',
+                    '>',
+                    now()->format('H:i:s')
+                );
+
+        });
+
+    })
+
+    ->orderBy('tanggal')
+    ->orderBy('jam_mulai')
+    ->get();
 
     $setting = Setting::first();
 
@@ -455,6 +676,120 @@
     </div>
 
 </div>
+
+
+<!-- =========================
+    JADWAL PEMINJAMAN
+========================== -->
+
+<div class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                Jadwal Peminjaman
+            </h2>
+
+            <p>
+                Semua jadwal peminjaman aktif dan yang akan datang
+            </p>
+
+        </div>
+
+        <div class="jadwal-wrapper">
+
+            @forelse($jadwalHariIni as $item)
+
+            <div class="jadwal-row">
+
+                <div class="jadwal-left">
+
+                    <div class="jadwal-title">
+                        {{ $item->kelas->nama_kelas }}
+                    </div>
+
+                    <div class="jadwal-sub">
+                        {{ $item->kelas->gedung->nama_gedung }}
+                    </div>
+
+                    <div class="jadwal-sub">
+                        {{ $item->kelas->gedung->fakultas->nama_fakultas ?? '-' }}
+                    </div>
+
+                </div>
+
+                <div class="jadwal-center">
+
+                    <div>
+                        👤 <strong>{{ $item->user->name }}</strong>
+                    </div>
+
+                    <div>
+                        🎓 {{ $item->user->prodi }}
+                    </div>
+
+                    <div>
+                        🏢 {{ $item->user->fakultas->nama_fakultas ?? '-' }}
+                    </div>
+
+                </div>
+
+                <div class="jadwal-right">
+
+                    <div>
+                        🕒
+                        {{ substr($item->jam_mulai,0,5) }}
+                        -
+                        {{ substr($item->jam_selesai,0,5) }}
+                    </div>
+
+                    <div>
+                        📅
+                        {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                    </div>
+
+                    @if($item->status == 'pending')
+
+                        <span class="badge badge-pending">
+                            Pending
+                        </span>
+
+                    @elseif($item->status == 'disetujui')
+
+                        <span class="badge badge-disetujui">
+                            Disetujui
+                        </span>
+
+                    @else
+
+                        <span class="badge badge-ditolak">
+                            Ditolak
+                        </span>
+
+                    @endif
+
+                </div>
+
+            </div>
+
+            @empty
+
+            <div class="alert alert-success text-center m-3">
+
+                Belum ada jadwal peminjaman
+
+            </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+
+</div>
+
 <!-- FEATURES -->
 <div class="section reveal">
 
@@ -577,11 +912,54 @@
 
             </div>
 
+            <div class="col-md-4">
+
+    <div class="feature-card">
+
+        <div class="feature-icon">
+            <i class="bi bi-calendar-check"></i>
+        </div>
+
+        <h4>
+            Jadwal Real-Time
+        </h4>
+
+        <p>
+            Lihat jadwal peminjaman yang sedang berlangsung maupun yang akan datang secara langsung.
+        </p>
+
+    </div>
+
+</div>
+
+<div class="col-md-4">
+
+    <div class="feature-card">
+
+        <div class="feature-icon">
+            <i class="bi bi-diagram-3"></i>
+        </div>
+
+        <h4>
+            Multi Fakultas
+        </h4>
+
+        <p>
+            Mendukung pengelolaan gedung dan ruang kelas dari seluruh fakultas dalam satu sistem terintegrasi.
+        </p>
+
+    </div>
+
+</div>
+
         </div>
 
     </div>
 
 </div>
+
+
+
 
 <!-- =========================
         ABOUT
@@ -1267,7 +1645,6 @@
     </div>
 
 </div>
-
 
 
 <!-- FEATURES -->

@@ -14,17 +14,7 @@ class PeminjamanController extends Controller
     public function create($kelas_id)
     {
         $kelas = Kelas::with('gedung.fakultas')
-
-    ->whereHas('gedung', function ($q){
-
-        $q->where(
-            'fakultas_id',
-            auth()->user()->fakultas_id
-        );
-
-    })
-
-    ->findOrFail($kelas_id);
+            ->findOrFail($kelas_id);
 
         return view('user.peminjaman.create', compact('kelas'));
     }
@@ -32,40 +22,106 @@ class PeminjamanController extends Controller
     // =========================
     // USER - SIMPAN DATA
     // =========================
-    public function store(Request $request)
-    {
-        $request->validate([
-            'kelas_id' => 'required',
-            'tanggal' => 'required|date',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
-            'keperluan' => 'required'
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'kelas_id' => 'required',
+        'tanggal' => 'required|date',
+        'jam_mulai' => 'required',
+        'jam_selesai' => 'required',
+        'keperluan' => 'required'
+    ]);
 
-        $kelas = Kelas::with('gedung')
-        ->findOrFail($request->kelas_id);
-
-        if(
-            $kelas->gedung->fakultas_id
-            != auth()->user()->fakultas_id
-        ){
-            abort(403);
-        }
-
-        Peminjaman::create([
-            'user_id' => auth()->id(),
-            'kelas_id' => $request->kelas_id,
-            'tanggal' => $request->tanggal,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'keperluan' => $request->keperluan,
-            'status' => 'pending'
-        ]);
-
-        return redirect()
-            ->back()
-            ->with('success', 'Pengajuan berhasil dikirim');
+    // Tidak boleh tanggal lampau
+    if (
+        $request->tanggal <
+        now()->toDateString()
+    ) {
+        return back()->with(
+            'error',
+            'Tidak dapat meminjam pada tanggal yang sudah lewat.'
+        );
     }
+
+    // Tidak boleh jam hari ini yang sudah lewat
+    if (
+        $request->tanggal == now()->toDateString()
+        &&
+        $request->jam_mulai <= now()->format('H:i')
+    ) {
+        return back()->with(
+            'error',
+            'Jam peminjaman sudah lewat.'
+        );
+    }
+
+    // Jam selesai harus lebih besar
+    if (
+        strtotime($request->jam_mulai)
+        >=
+        strtotime($request->jam_selesai)
+    ) {
+        return back()->with(
+            'error',
+            'Jam selesai harus lebih besar dari jam mulai.'
+        );
+    }
+
+    // Cek bentrok jadwal
+    $cekBentrok = Peminjaman::where(
+            'kelas_id',
+            $request->kelas_id
+        )
+
+        ->where(
+            'tanggal',
+            $request->tanggal
+        )
+
+        ->where(
+            'status',
+            'disetujui'
+        )
+
+        ->where(
+            'jam_mulai',
+            '<',
+            $request->jam_selesai
+        )
+
+        ->where(
+            'jam_selesai',
+            '>',
+            $request->jam_mulai
+        )
+
+        ->exists();
+
+    if ($cekBentrok) {
+
+        return back()->with(
+            'error',
+            'Ruangan sudah digunakan pada jadwal tersebut.'
+        );
+    }
+
+    Peminjaman::create([
+        'user_id' => auth()->id(),
+        'kelas_id' => $request->kelas_id,
+        'tanggal' => $request->tanggal,
+        'jam_mulai' => $request->jam_mulai,
+        'jam_selesai' => $request->jam_selesai,
+        'keperluan' => $request->keperluan,
+        'status' => 'pending'
+    ]);
+
+    return redirect()
+        ->back()
+        ->with(
+            'success',
+            'Pengajuan berhasil dikirim.'
+        );
+}
 
     // =========================
     // USER - RIWAYAT
@@ -88,7 +144,7 @@ class PeminjamanController extends Controller
     if(auth()->user()->role == 'superadmin')
     {
         $data = Peminjaman::with(
-            'user',
+            'user.fakultas',
             'kelas.gedung.fakultas'
         )
         ->latest()
@@ -97,7 +153,7 @@ class PeminjamanController extends Controller
     else
     {
         $data = Peminjaman::with(
-            'user',
+            'user.fakultas',
             'kelas.gedung.fakultas'
         )
 
@@ -135,6 +191,43 @@ if(
     != auth()->user()->fakultas_id
 ){
     abort(403);
+}
+
+$cekBentrok = Peminjaman::where(
+        'kelas_id',
+        $data->kelas_id
+    )
+    ->where(
+        'tanggal',
+        $data->tanggal
+    )
+    ->where(
+        'status',
+        'disetujui'
+    )
+    ->where(
+        'id',
+        '!=',
+        $data->id
+    )
+    ->where(
+        'jam_mulai',
+        '<',
+        $data->jam_selesai
+    )
+    ->where(
+        'jam_selesai',
+        '>',
+        $data->jam_mulai
+    )
+    ->exists();
+
+if ($cekBentrok) {
+
+    return back()->with(
+        'error',
+        'Tidak dapat disetujui karena jadwal bentrok dengan peminjaman yang sudah disetujui.'
+    );
 }
 
         $data->update([

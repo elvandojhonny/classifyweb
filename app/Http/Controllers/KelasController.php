@@ -51,16 +51,6 @@ class KelasController extends Controller
     public function userIndex()
     {
         $kelas = Kelas::with('gedung.fakultas')
-
-            ->whereHas('gedung', function ($q) {
-
-                $q->where(
-                    'fakultas_id',
-                    auth()->user()->fakultas_id
-                );
-
-            })
-
             ->latest()
             ->get();
 

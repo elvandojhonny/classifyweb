@@ -14,6 +14,7 @@ use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SettingController;
 
 use App\Models\Pengumuman;
+use App\Models\Peminjaman;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,34 @@ Route::get('/', function () {
         ->take(3)
         ->get();
 
-    return view('welcome', compact('pengumuman'));
+    $sedangDipakai = Peminjaman::with([
+        'user.fakultas',
+        'kelas.gedung'
+    ])
+    ->where('status', 'disetujui')
+    ->whereDate('tanggal', now())
+    ->where('jam_mulai', '<=', now()->format('H:i:s'))
+    ->where('jam_selesai', '>=', now()->format('H:i:s'))
+    ->get();
+
+    $jadwalHariIni = Peminjaman::with([
+    'user.fakultas',
+    'kelas.gedung.fakultas'
+])
+->whereIn('status', [
+    'pending',
+    'disetujui'
+])
+->whereDate('tanggal', '>=', now()->toDateString())
+->orderBy('tanggal')
+->orderBy('jam_mulai')
+->get();
+
+    return view('welcome', compact(
+        'pengumuman',
+        'sedangDipakai',
+        'jadwalHariIni'
+    ));
 
 });
 

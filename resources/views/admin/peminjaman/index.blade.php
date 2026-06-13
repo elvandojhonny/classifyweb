@@ -176,8 +176,22 @@
     }
 
     .info-box{
-        font-size:11px;
+        background:#f8fafc;
+        border:1px solid #e2e8f0;
+        border-radius:10px;
         padding:8px 10px;
+        font-size:12px;
+        color:#475569;
+        display:flex;
+        align-items:center;
+        gap:6px;
+        height:100%;
+        overflow:hidden;
+    }
+
+    .info-box i{
+        color:#4f46e5;
+        flex-shrink:0;
     }
 
     .keperluan-box{
@@ -222,19 +236,52 @@
                 {{ $item->kelas->nama_kelas }}
             </div>
 
-            <div class="info-box">
-                <i class="bi bi-person"></i>
-                {{ $item->user->name }}
-            </div>
+            <div class="row g-2 mb-3">
 
-            <div class="info-box">
-                <i class="bi bi-calendar-event"></i>
-                {{ $item->tanggal }}
-            </div>
+                <div class="col-6">
+                    <div class="info-box">
+                        <i class="bi bi-person"></i>
+                        {{ $item->user->name }}
+                    </div>
+                </div>
 
-            <div class="info-box">
-                <i class="bi bi-clock"></i>
-                {{ $item->jam_mulai }} - {{ $item->jam_selesai }}
+                <div class="col-6">
+                    <div class="info-box">
+                        <i class="bi bi-card-text"></i>
+                        {{ $item->user->nim }}
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="info-box">
+                        <i class="bi bi-book"></i>
+                        {{ $item->user->prodi }}
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="info-box">
+                        <i class="bi bi-mortarboard"></i>
+                        {{ $item->user->fakultas->nama_fakultas ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="info-box">
+                        <i class="bi bi-calendar-event"></i>
+                        {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="info-box">
+                        <i class="bi bi-clock"></i>
+                        {{ substr($item->jam_mulai,0,5) }}
+                        -
+                        {{ substr($item->jam_selesai,0,5) }}
+                    </div>
+                </div>
+
             </div>
 
             <div class="keperluan-box">
