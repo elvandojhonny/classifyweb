@@ -8,169 +8,240 @@
 
 <style>
 
-    .section-header{
-        margin-bottom: 28px;
-    }
+.section-header{
+    margin-bottom:24px;
+}
+
+.section-header h4{
+    font-size:22px;
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:4px;
+}
+
+.section-header p{
+    color:#64748b;
+    font-size:14px;
+    margin:0;
+}
+
+.peminjaman-card{
+    background:white;
+    border-radius:20px;
+    padding:18px;
+    border:1px solid #e2e8f0;
+    box-shadow:0 4px 12px rgba(0,0,0,.04);
+    transition:.25s;
+    height:100%;
+}
+
+.peminjaman-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 24px rgba(0,0,0,.08);
+}
+
+.card-title{
+    font-size:17px;
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:14px;
+    line-height:1.4;
+}
+
+.info-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    font-size:13px;
+    color:#475569;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.keperluan-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:10px 12px;
+    margin-top:10px;
+    margin-bottom:12px;
+}
+
+.keperluan-box small{
+    display:block;
+    color:#64748b;
+    margin-bottom:4px;
+    font-size:11px;
+}
+
+.keperluan-box p{
+    margin:0;
+    color:#0f172a;
+    font-size:13px;
+    line-height:1.5;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+}
+
+.status-badge{
+    display:inline-block;
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:600;
+    margin-bottom:14px;
+}
+
+.status-pending{
+    background:rgba(245,158,11,.12);
+    color:#d97706;
+}
+
+.status-success{
+    background:rgba(34,197,94,.12);
+    color:#16a34a;
+}
+
+.status-danger{
+    background:rgba(239,68,68,.12);
+    color:#dc2626;
+}
+
+.action-group{
+    display:flex;
+    gap:8px;
+}
+
+.btn-approve{
+    flex:1;
+    border:none;
+    border-radius:10px;
+    padding:8px;
+    background:rgba(34,197,94,.12);
+    color:#16a34a;
+    font-size:13px;
+    font-weight:600;
+}
+
+.btn-approve:hover{
+    background:rgba(34,197,94,.2);
+}
+
+.btn-reject{
+    flex:1;
+    border:none;
+    border-radius:10px;
+    padding:8px;
+    background:rgba(239,68,68,.12);
+    color:#dc2626;
+    font-size:13px;
+    font-weight:600;
+}
+
+.btn-reject:hover{
+    background:rgba(239,68,68,.2);
+}
+
+.empty-card{
+    background:white;
+    border-radius:20px;
+    padding:60px 20px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.04);
+}
+
+@media(max-width:768px){
 
     .section-header h4{
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 4px;
+        font-size:18px;
     }
 
     .section-header p{
-        color: #64748b;
-        margin: 0;
+        font-size:12px;
     }
 
     .peminjaman-card{
-        background: white;
-        border-radius: 24px;
-        padding: 24px;
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-        transition: 0.3s ease;
-        height: 100%;
-    }
-
-    .peminjaman-card:hover{
-        transform: translateY(-5px);
-        box-shadow: 0 14px 28px rgba(0,0,0,0.08);
+        padding:14px;
+        border-radius:16px;
     }
 
     .card-title{
-        font-size: 22px;
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 12px;
+        font-size:14px;
+        margin-bottom:10px;
     }
 
-    .info-item{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: #475569;
-        margin-bottom: 10px;
-        font-size: 14px;
+    .info-box{
+        font-size:11px;
+        padding:8px 10px;
+    }
+
+    .keperluan-box{
+        padding:8px 10px;
+    }
+
+    .keperluan-box p{
+        font-size:11px;
     }
 
     .status-badge{
-        display: inline-block;
-        padding: 8px 14px;
-        border-radius: 30px;
-        font-size: 12px;
-        font-weight: 600;
-        margin-top: 10px;
+        font-size:10px;
+        padding:6px 10px;
     }
 
-    .status-pending{
-        background: rgba(245,158,11,0.12);
-        color: #d97706;
-    }
-
-    .status-success{
-        background: rgba(34,197,94,0.12);
-        color: #16a34a;
-    }
-
-    .status-danger{
-        background: rgba(239,68,68,0.12);
-        color: #dc2626;
-    }
-
-    .action-group{
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-    }
-
-    .btn-approve{
-        flex: 1;
-        border: none;
-        border-radius: 12px;
-        padding: 10px;
-        background: rgba(34,197,94,0.12);
-        color: #16a34a;
-        font-weight: 600;
-        transition: 0.3s ease;
-    }
-
-    .btn-approve:hover{
-        background: rgba(34,197,94,0.2);
-    }
-
+    .btn-approve,
     .btn-reject{
-        flex: 1;
-        border: none;
-        border-radius: 12px;
-        padding: 10px;
-        background: rgba(239,68,68,0.12);
-        color: #dc2626;
-        font-weight: 600;
-        transition: 0.3s ease;
+        font-size:11px;
+        padding:7px;
     }
-
-    .btn-reject:hover{
-        background: rgba(239,68,68,0.2);
-    }
-
-    .empty-card{
-        background: white;
-        border-radius: 24px;
-        padding: 60px 20px;
-        text-align: center;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    }
+}
 
 </style>
 
-<!-- HEADER -->
 <div class="section-header">
 
     <h4>Data Peminjaman</h4>
 
-    <p>
-        Kelola pengajuan peminjaman ruangan
-    </p>
+    <p>Kelola pengajuan peminjaman ruangan</p>
 
 </div>
 
-<!-- GRID -->
-<div class="row g-4">
+<div class="row g-3">
 
     @forelse($data as $item)
 
-    <div class="col-md-6">
+    <div class="col-6 col-md-6 col-lg-4">
 
         <div class="peminjaman-card">
 
-            <!-- TITLE -->
             <div class="card-title">
                 {{ $item->kelas->nama_kelas }}
             </div>
 
-            <!-- INFO -->
-            <div class="info-item">
+            <div class="info-box">
                 <i class="bi bi-person"></i>
                 {{ $item->user->name }}
             </div>
 
-            <div class="info-item">
+            <div class="info-box">
                 <i class="bi bi-calendar-event"></i>
                 {{ $item->tanggal }}
             </div>
 
-            <div class="info-item">
+            <div class="info-box">
                 <i class="bi bi-clock"></i>
                 {{ $item->jam_mulai }} - {{ $item->jam_selesai }}
             </div>
 
-            <div class="info-item">
-                <i class="bi bi-chat-left-text"></i>
-                {{ $item->keperluan }}
+            <div class="keperluan-box">
+                <small>Keperluan</small>
+                <p>{{ $item->keperluan }}</p>
             </div>
 
-            <!-- STATUS -->
             @if($item->status == 'disetujui')
 
                 <span class="status-badge status-success">
@@ -191,12 +262,11 @@
 
             @endif
 
-            <!-- ACTION -->
             @if($item->status == 'pending')
 
             <div class="action-group">
 
-                <form action="{{ route('peminjaman.approve', $item->id) }}"
+                <form action="{{ route('peminjaman.approve',$item->id) }}"
                       method="POST"
                       class="flex-fill">
 
@@ -204,14 +274,12 @@
                     @method('PUT')
 
                     <button class="btn-approve w-100">
-
                         Approve
-
                     </button>
 
                 </form>
 
-                <form action="{{ route('peminjaman.reject', $item->id) }}"
+                <form action="{{ route('peminjaman.reject',$item->id) }}"
                       method="POST"
                       class="flex-fill">
 
@@ -219,9 +287,7 @@
                     @method('PUT')
 
                     <button class="btn-reject w-100">
-
                         Reject
-
                     </button>
 
                 </form>

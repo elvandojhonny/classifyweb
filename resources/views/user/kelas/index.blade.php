@@ -1,203 +1,283 @@
 @extends('layouts.user')
 
+@section('page-title', 'Kelas')
+
 @section('content')
 
 <style>
 
-    .page-topbar{
-        background: white;
-        border-radius: 22px;
-        padding: 22px 26px;
-        margin-bottom: 28px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    }
+.section-header{
+    margin-bottom:24px;
+}
 
-    .page-topbar h3{
-        margin: 0;
-        font-weight: 700;
-        color: #0f172a;
-    }
+.section-header h4{
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:4px;
+}
 
-    .page-topbar p{
-        margin: 4px 0 0;
-        color: #64748b;
-        font-size: 14px;
-    }
+.section-header p{
+    color:#64748b;
+    margin:0;
+}
 
-    .profile-user{
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: #4f46e5;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
+/* CARD */
+
+.kelas-card{
+    background:white;
+    border-radius:22px;
+    padding:20px;
+    border:1px solid rgba(0,0,0,.04);
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+    height:100%;
+    transition:.3s;
+}
+
+.kelas-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 24px rgba(0,0,0,.08);
+}
+
+.kelas-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.kelas-icon{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    background:rgba(79,70,229,.12);
+    color:#4f46e5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    flex-shrink:0;
+}
+
+.kelas-info{
+    flex:1;
+    min-width:0;
+}
+
+.kelas-title{
+    font-size:18px;
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:2px;
+}
+
+.kelas-subtitle{
+    font-size:13px;
+    color:#64748b;
+}
+
+.info-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    padding:12px;
+    margin-bottom:10px;
+}
+
+.info-box small{
+    display:block;
+    color:#64748b;
+    margin-bottom:4px;
+}
+
+.info-box strong{
+    color:#0f172a;
+    font-size:14px;
+}
+
+.btn-pinjam{
+    width:100%;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    background:#4f46e5;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:.3s;
+}
+
+.btn-pinjam:hover{
+    background:#4338ca;
+    color:white;
+}
+
+.empty-card{
+    background:white;
+    border-radius:24px;
+    padding:60px 20px;
+    text-align:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .row.g-4{
+        --bs-gutter-x:12px;
+        --bs-gutter-y:12px;
     }
 
     .kelas-card{
-        background: white;
-        border-radius: 24px;
-        padding: 24px;
-        height: 100%;
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 4px 14px rgba(0,0,0,0.04);
-        transition: 0.3s ease;
+        padding:14px;
+        border-radius:18px;
     }
 
-    .kelas-card:hover{
-        transform: translateY(-5px);
-        box-shadow: 0 14px 28px rgba(0,0,0,0.08);
+    .kelas-header{
+        gap:10px;
+        margin-bottom:12px;
     }
 
-    .kelas-badge{
-        font-size: 12px;
-        padding: 6px 12px;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-
-    .badge-id{
-        background: #f1f5f9;
-        color: #475569;
-    }
-
-    .badge-available{
-        background: rgba(34,197,94,0.12);
-        color: #16a34a;
+    .kelas-icon{
+        width:42px;
+        height:42px;
+        font-size:18px;
+        border-radius:12px;
     }
 
     .kelas-title{
-        font-size: 28px;
-        font-weight: 700;
-        color: #0f172a;
-        margin-top: 18px;
-        margin-bottom: 20px;
+        font-size:14px;
     }
 
-    .kelas-info{
-        color: #475569;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    .kelas-subtitle{
+        font-size:11px;
     }
 
-    .kelas-btn{
-        width: 100%;
-        border: none;
-        padding: 13px;
-        border-radius: 14px;
-        background: #4f46e5;
-        color: white;
-        font-weight: 600;
-        margin-top: 20px;
-        transition: 0.3s ease;
-        text-decoration: none;
-        display: block;
-        text-align: center;
+    .info-box{
+        padding:10px;
+        margin-bottom:8px;
     }
 
-    .kelas-btn:hover{
-        background: #4338ca;
+    .info-box small{
+        font-size:10px;
     }
+
+    .info-box strong{
+        font-size:12px;
+    }
+
+    .btn-pinjam{
+        padding:10px;
+        font-size:12px;
+        border-radius:10px;
+    }
+
+    .section-header h4{
+        font-size:20px;
+    }
+
+    .section-header p{
+        font-size:13px;
+    }
+}
 
 </style>
 
-<!-- TOPBAR -->
-<div class="page-topbar d-flex justify-content-between align-items-center">
+<!-- HEADER -->
+<div class="section-header">
 
-    <div>
+    <h4>Kelola Peminjaman</h4>
 
-        <h3>Peminjaman Kelas</h3>
-
-        <p>
-            Ajukan peminjaman ruangan dengan mudah
-        </p>
-
-    </div>
-
-    <div class="d-flex align-items-center gap-3">
-
-        <div class="text-end">
-            <strong>{{ auth()->user()->name }}</strong><br>
-            <small class="text-muted">User</small>
-        </div>
-
-        <div class="profile-user">
-            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
-        </div>
-
-    </div>
+    <p>
+        Pilih ruangan yang tersedia untuk diajukan peminjaman
+    </p>
 
 </div>
 
 <!-- GRID -->
 <div class="row g-4">
 
-    @forelse($kelas as $item)
+@forelse($kelas as $item)
 
-    <div class="col-md-4">
+<div class="col-6 col-md-6 col-lg-4">
 
-        <div class="kelas-card">
+    <div class="kelas-card">
 
-            <!-- BADGE -->
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="kelas-header">
 
-                <span class="kelas-badge badge-id">
-                    ID #{{ $item->id }}
-                </span>
-
-                <span class="kelas-badge badge-available">
-                    Tersedia
-                </span>
-
-            </div>
-
-            <!-- TITLE -->
-            <div class="kelas-title">
-                {{ $item->nama_kelas }}
-            </div>
-
-            <!-- INFO -->
-            <div class="kelas-info">
-                <i class="bi bi-building"></i>
-                {{ $item->gedung->nama_gedung }}
+            <div class="kelas-icon">
+                <i class="bi bi-door-open"></i>
             </div>
 
             <div class="kelas-info">
-                <i class="bi bi-mortarboard"></i>
-                {{ $item->gedung->fakultas->nama_fakultas }}
+
+                <div class="kelas-title">
+                    {{ $item->nama_kelas }}
+                </div>
+
+                <div class="kelas-subtitle">
+                    Ruang Kelas
+                </div>
+
             </div>
 
-            <!-- BUTTON -->
-            <a href="{{ route('peminjaman.create', $item->id) }}"
-               class="kelas-btn">
+        </div>
 
-                Ajukan Kelas
+        <div class="info-box">
 
-            </a>
+            <small>Gedung</small>
+
+            <strong>
+                {{ $item->gedung->nama_gedung ?? '-' }}
+            </strong>
 
         </div>
 
-    </div>
+        <div class="info-box">
 
-    @empty
+            <small>Fakultas</small>
 
-    <div class="col-12">
-
-        <div class="bg-white rounded-4 p-5 text-center shadow-sm">
-
-            <p class="text-muted mb-0">
-                Tidak ada kelas tersedia
-            </p>
+            <strong>
+                {{ $item->gedung->fakultas->nama_fakultas ?? '-' }}
+            </strong>
 
         </div>
 
+        <a href="{{ route('peminjaman.create',$item->id) }}"
+           class="btn-pinjam">
+
+            <i class="bi bi-send"></i>
+            Ajukan Kelas
+
+        </a>
+
     </div>
 
-    @endforelse
+</div>
+
+@empty
+
+<div class="col-12">
+
+    <div class="empty-card">
+
+        <h5 class="mb-2">
+            Tidak Ada Kelas
+        </h5>
+
+        <p class="text-muted mb-0">
+            Belum ada kelas yang tersedia untuk dipinjam
+        </p>
+
+    </div>
+
+</div>
+
+@endforelse
 
 </div>
 

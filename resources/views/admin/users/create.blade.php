@@ -8,240 +8,275 @@
 
 <style>
 
+    .form-title{
+    font-size:22px;
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:4px;
+}
+
+.form-subtitle{
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:28px;
+}
+
+.form-card{
+    background:white;
+    border-radius:22px;
+    padding:22px;
+    border:1px solid rgba(0,0,0,.05);
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+    height:100%;
+}
+
+.card-section-title{
+    font-size:16px;
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:18px;
+}
+
+.form-label{
+    font-size:13px;
+    font-weight:600;
+    color:#475569;
+    margin-bottom:8px;
+}
+
+.form-control,
+.form-select{
+    min-height:48px;
+    border-radius:14px;
+    border:1px solid #e2e8f0;
+    font-size:14px;
+    box-shadow:none !important;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#4f46e5;
+}
+
+.submit-btn{
+    width:100%;
+    background:#4f46e5;
+    color:white;
+    border:none;
+    border-radius:16px;
+    padding:14px;
+    font-weight:600;
+    margin-top:24px;
+}
+
+.submit-btn:hover{
+    background:#4338ca;
+}
+
+@media(max-width:768px){
+
     .form-card{
-        background: white;
-        border-radius: 24px;
-        padding: 32px;
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        padding:16px;
+        border-radius:18px;
     }
 
-    .form-header{
-        margin-bottom: 28px;
+    .form-title{
+        font-size:18px;
     }
 
-    .form-header h4{
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 4px;
+    .form-subtitle{
+        font-size:13px;
     }
 
-    .form-header p{
-        color: #64748b;
-        margin: 0;
+    .card-section-title{
+        font-size:15px;
     }
-
-    .form-label{
-        font-weight: 600;
-        color: #334155;
-        margin-bottom: 8px;
-    }
-
-    .form-control,
-    .form-select{
-        border-radius: 14px;
-        padding: 12px 16px;
-        border: 1px solid #e2e8f0;
-        box-shadow: none !important;
-        transition: 0.3s ease;
-    }
-
-    .form-control:focus,
-    .form-select:focus{
-        border-color: #4f46e5;
-    }
-
-    .submit-btn{
-        background: #4f46e5;
-        color: white;
-        border: none;
-        padding: 13px 24px;
-        border-radius: 14px;
-        font-weight: 600;
-        transition: 0.3s ease;
-    }
-
-    .submit-btn:hover{
-        background: #4338ca;
-    }
+}
 
 </style>
 
-<div class="row justify-content-center">
+<div class="mb-4">
 
-    <div class="col-md-8">
+    <div class="form-title">
+        Tambah Akun
+    </div>
 
-        <div class="form-card">
-
-            <!-- HEADER -->
-            <div class="form-header">
-
-                <h4>Tambah Akun</h4>
-
-                <p>
-                    Tambahkan akun pengguna baru ke dalam sistem
-                </p>
-
-            </div>
-
-            <!-- FORM -->
-            <form method="POST"
-                  action="{{ route('users.store') }}">
-
-                @csrf
-
-                <div class="row">
-
-                    <!-- NAMA -->
-                    <div class="col-md-6 mb-4">
-
-                        <label class="form-label">
-                            Nama Lengkap
-                        </label>
-
-                        <input type="text"
-                               name="name"
-                               class="form-control"
-                               placeholder="Masukkan nama lengkap"
-                               required>
-
-                    </div>
-
-                    <!-- EMAIL -->
-                    <div class="col-md-6 mb-4">
-
-                        <label class="form-label">
-                            Email
-                        </label>
-
-                        <input type="email"
-                               name="email"
-                               class="form-control"
-                               placeholder="Masukkan email"
-                               required>
-
-                    </div>
-
-                    <!-- PASSWORD -->
-                    <div class="col-md-6 mb-4">
-
-                        <label class="form-label">
-                            Password
-                        </label>
-
-                        <input type="password"
-                               name="password"
-                               class="form-control"
-                               placeholder="Masukkan password"
-                               required>
-
-                    </div>
-
-                    <!-- NIM -->
-                    <div class="col-md-6 mb-4">
-
-                        <label class="form-label">
-                            NIM
-                        </label>
-
-                        <input type="text"
-                               name="nim"
-                               class="form-control"
-                               placeholder="Masukkan NIM"
-                               required>
-
-                    </div>
-
-                    <!-- PRODI -->
-                    <div class="col-md-6 mb-4">
-
-                        <label class="form-label">
-                            Program Studi
-                        </label>
-
-                        <input type="text"
-                               name="prodi"
-                               class="form-control"
-                               placeholder="Masukkan program studi"
-                               required>
-
-                    </div>
-
-                    <div class="col-md-6 mb-4">
-
-    <label class="form-label">
-        Fakultas
-    </label>
-
-    <select name="fakultas_id"
-            class="form-select"
-            required>
-
-        <option value="">
-            -- Pilih Fakultas --
-        </option>
-
-        @foreach($fakultas as $f)
-
-            <option value="{{ $f->id }}">
-                {{ $f->nama_fakultas }}
-            </option>
-
-        @endforeach
-
-    </select>
+    <div class="form-subtitle">
+        Tambahkan akun pengguna baru ke dalam sistem
+    </div>
 
 </div>
 
-                    <!-- ROLE -->
-                    <div class="col-md-6 mb-4">
+<form method="POST"
+      action="{{ route('users.store') }}">
 
-                        <label class="form-label">
-                            Role Akun
-                        </label>
+    @csrf
 
-                        <select name="role"
-                                class="form-select"
-                                required>
+    <div class="row g-4">
 
-                            <option value="">
-                                -- Pilih Role --
-                            </option>
+        <!-- DATA AKUN -->
+        <div class="col-lg-6">
 
-                            <option value="user">
-                                User
-                            </option>
+            <div class="form-card">
 
-                            <option value="admin">
-                                Admin Fakultas
-                            </option>
+                <div class="card-section-title">
+                    Data Akun
+                </div>
 
-                            @if(auth()->user()->role == 'superadmin')
-                                <option value="superadmin">
-                                    Super Admin
-                                </option>
-                            @endif
+                <div class="mb-3">
 
-                        </select>
+                    <label class="form-label">
+                        Nama Lengkap
+                    </label>
 
-                    </div>
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           placeholder="Masukkan nama lengkap"
+                           required>
 
                 </div>
 
-                <!-- BUTTON -->
-                <button type="submit"
-                        class="submit-btn">
+                <div class="mb-3">
 
-                    Simpan Akun
+                    <label class="form-label">
+                        Email
+                    </label>
 
-                </button>
+                    <input type="email"
+                           name="email"
+                           class="form-control"
+                           placeholder="Masukkan email"
+                           required>
 
-            </form>
+                </div>
+
+                <div>
+
+                    <label class="form-label">
+                        Password
+                    </label>
+
+                    <input type="password"
+                           name="password"
+                           class="form-control"
+                           placeholder="Masukkan password"
+                           required>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- AKADEMIK -->
+        <div class="col-lg-6">
+
+            <div class="form-card">
+
+                <div class="card-section-title">
+                    Akademik & Hak Akses
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        NIM
+                    </label>
+
+                    <input type="text"
+                           name="nim"
+                           class="form-control"
+                           placeholder="Masukkan NIM"
+                           required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Program Studi
+                    </label>
+
+                    <input type="text"
+                           name="prodi"
+                           class="form-control"
+                           placeholder="Masukkan program studi"
+                           required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Fakultas
+                    </label>
+
+                    <select name="fakultas_id"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Pilih Fakultas --
+                        </option>
+
+                        @foreach($fakultas as $f)
+
+                            <option value="{{ $f->id }}">
+                                {{ $f->nama_fakultas }}
+                            </option>
+
+                        @endforeach
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label class="form-label">
+                        Role Akun
+                    </label>
+
+                    <select name="role"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Pilih Role --
+                        </option>
+
+                        <option value="user">
+                            User
+                        </option>
+
+                        <option value="admin">
+                            Admin Fakultas
+                        </option>
+
+                        @if(auth()->user()->role == 'superadmin')
+                        <option value="superadmin">
+                            Super Admin
+                        </option>
+                        @endif
+
+                    </select>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
+    <button type="submit"
+            class="submit-btn">
+
+        Simpan Akun
+
+    </button>
+
+</form>
 
 @endsection

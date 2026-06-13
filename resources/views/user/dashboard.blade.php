@@ -1,356 +1,284 @@
 @extends('layouts.user')
 
+@section('page-title', 'Dashboard User')
+
 @section('content')
 
 <style>
 
-    body{
-        background: #f1f5f9;
-    }
-
     /* =========================
-        TOPBAR DASHBOARD
-    ========================== */
+    STAT CARD
+========================= */
 
-    .topbar-dashboard{
-        background: white;
-        border-radius: 20px;
-        padding: 20px 25px;
-        margin-bottom: 28px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    }
+.stat-card{
+    background:white;
+    border-radius:24px;
+    padding:24px;
+    border:1px solid rgba(0,0,0,.04);
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+    transition:.3s ease;
+    min-height:180px;
+}
 
-    .welcome-text h4{
-        margin: 0;
-        font-weight: 700;
-        color: #0f172a;
-    }
+.stat-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 16px 30px rgba(0,0,0,.08);
+}
 
-    .welcome-text small{
-        color: #64748b;
-    }
+.stat-icon{
+    width:60px;
+    height:60px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+}
 
-    .profile-user{
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: #4f46e5;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-    }
+.stat-title{
+    color:#64748b;
+    font-size:14px;
+    margin-top:18px;
+}
 
-    /* =========================
-        CARD STATISTIK
-    ========================== */
+.stat-number{
+    font-size:38px;
+    font-weight:700;
+    color:#0f172a;
+    margin-top:4px;
+}
 
-    .dashboard-card{
-        background: white;
-        border-radius: 22px;
-        padding: 24px;
-        border: 1px solid rgba(0,0,0,0.03);
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-        transition: 0.3s ease;
-        height: 100%;
-    }
+/* CARD CONTENT */
 
-    .dashboard-card:hover{
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.08);
-    }
+.content-card{
+    background:white;
+    border-radius:24px;
+    padding:24px;
+    margin-top:28px;
+    border:1px solid rgba(0,0,0,.04);
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
 
-    .card-icon{
-        width: 55px;
-        height: 55px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-    }
+.content-card h5{
+    font-weight:700;
+    color:#0f172a;
+}
 
-    .dashboard-card small{
-        color: #64748b;
-        font-size: 14px;
-    }
+/* ACTIVITY */
 
-    .dashboard-card h2{
-        margin-top: 8px;
-        margin-bottom: 0;
-        font-size: 34px;
-        font-weight: 700;
-        color: #0f172a;
-    }
+.activity-scroll{
+    max-height:360px;
+    overflow-y:auto;
+    padding-right:6px;
+}
 
-    .bg-primary-soft{
-        background: rgba(79,70,229,0.12);
-        color: #4f46e5;
-    }
+.activity-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid #e2e8f0;
+}
 
-    .bg-success-soft{
-        background: rgba(34,197,94,0.12);
-        color: #22c55e;
-    }
+.activity-item:last-child{
+    border-bottom:none;
+}
 
-    .bg-danger-soft{
-        background: rgba(239,68,68,0.12);
-        color: #ef4444;
-    }
+/* BADGE */
 
-    .bg-warning-soft{
-        background: rgba(245,158,11,0.12);
-        color: #f59e0b;
-    }
+.badge-modern{
+    padding:7px 14px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:600;
+}
 
-    /* =========================
-        CONTENT CARD
-    ========================== */
+.badge-success{
+    background:rgba(34,197,94,.12);
+    color:#16a34a;
+}
+
+.badge-danger{
+    background:rgba(239,68,68,.12);
+    color:#dc2626;
+}
+
+.badge-warning{
+    background:rgba(245,158,11,.12);
+    color:#d97706;
+}
+
+.bg-primary-soft{
+    background:rgba(79,70,229,.12);
+    color:#4f46e5;
+}
+
+.bg-success-soft{
+    background:rgba(34,197,94,.12);
+    color:#16a34a;
+}
+
+.bg-danger-soft{
+    background:rgba(239,68,68,.12);
+    color:#dc2626;
+}
+
+.bg-warning-soft{
+    background:rgba(245,158,11,.12);
+    color:#d97706;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
 
     .content-card{
-        background: white;
-        border-radius: 22px;
-        padding: 24px;
-        margin-top: 28px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    }
-
-    .content-card h5{
-        font-weight: 700;
-        margin-bottom: 20px;
-        color: #0f172a;
-    }
-
-    /* =========================
-        ACTIVITY
-    ========================== */
-
-    .activity-scroll{
-        max-height: 280px;
-        overflow-y: auto;
-        padding-right: 6px;
-    }
-
-    .activity-scroll::-webkit-scrollbar{
-        width: 6px;
-    }
-
-    .activity-scroll::-webkit-scrollbar-thumb{
-        background: #cbd5e1;
-        border-radius: 20px;
-    }
-
-    .activity-scroll::-webkit-scrollbar-track{
-        background: transparent;
+        padding:18px;
     }
 
     .activity-item{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 0;
-        border-bottom: 1px solid #e2e8f0;
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
     }
 
-    .activity-item:last-child{
-        border-bottom: none;
+    .badge-modern{
+        align-self:flex-start;
     }
 
-    .status-badge{
-        padding: 6px 14px;
-        border-radius: 30px;
-        font-size: 12px;
-        font-weight: 600;
+    .activity-scroll{
+        max-height:none;
     }
 
-    .status-success{
-        background: rgba(34,197,94,0.12);
-        color: #16a34a;
+    .stat-number{
+        font-size:30px;
+    }
+}
+
+@media(max-width:576px){
+
+    .row.g-4{
+        --bs-gutter-x:12px;
+        --bs-gutter-y:12px;
     }
 
-    .status-danger{
-        background: rgba(239,68,68,0.12);
-        color: #dc2626;
+    .stat-card{
+        padding:16px;
+        min-height:140px;
+        border-radius:18px;
     }
 
-    .status-warning{
-        background: rgba(245,158,11,0.12);
-        color: #d97706;
+    .stat-icon{
+        width:42px;
+        height:42px;
+        font-size:18px;
+        border-radius:12px;
     }
 
-    /* =========================
-        PENGUMUMAN
-    ========================== */
-
-    .announcement-item{
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        padding: 14px;
-        margin-top: 14px;
+    .stat-title{
+        font-size:12px;
     }
 
-    .announcement-item strong{
-        color: #0f172a;
-        font-size: 14px;
+    .stat-number{
+        font-size:24px;
     }
 
-    .announcement-item small{
-        color: #64748b;
-        line-height: 1.6;
+    .content-card{
+        padding:16px;
     }
+}
 
 </style>
 
 <div class="container-fluid">
 
-    <!-- TOPBAR -->
-    <div class="topbar-dashboard d-flex justify-content-between align-items-center">
-
-        <div class="welcome-text">
-
-            <h4>Dashboard</h4>
-
-            <small>
-                Selamat datang kembali di sistem peminjaman ruangan
-            </small>
-
-        </div>
-
-        <div class="d-flex align-items-center gap-3">
-
-            <div class="text-end">
-
-                <strong>
-                    {{ auth()->user()->name }}
-                </strong><br>
-
-                <small>User</small>
-
-            </div>
-
-            <div class="profile-user">
-
-                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
-
-            </div>
-
-        </div>
-
-    </div>
 
     <!-- STATISTIK -->
     <div class="row g-4">
 
         <!-- TOTAL -->
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
 
-            <div class="dashboard-card">
+    <div class="stat-card">
 
-                <div class="d-flex justify-content-between align-items-start">
-
-                    <div>
-
-                        <small>Total Pengajuan</small>
-
-                        <h2>{{ $totalPengajuan }}</h2>
-
-                    </div>
-
-                    <div class="card-icon bg-primary-soft">
-
-                        <i class="bi bi-folder2-open"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div class="stat-icon bg-primary-soft">
+            <i class="bi bi-folder2-open"></i>
         </div>
+
+        <div class="stat-title">
+            Total Pengajuan
+        </div>
+
+        <div class="stat-number">
+            {{ $totalPengajuan }}
+        </div>
+
+    </div>
+
+</div>
 
         <!-- DISETUJUI -->
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
 
-            <div class="dashboard-card">
+    <div class="stat-card">
 
-                <div class="d-flex justify-content-between align-items-start">
-
-                    <div>
-
-                        <small>Disetujui</small>
-
-                        <h2>{{ $disetujui }}</h2>
-
-                    </div>
-
-                    <div class="card-icon bg-success-soft">
-
-                        <i class="bi bi-check-circle"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div class="stat-icon bg-success-soft">
+            <i class="bi bi-check-circle"></i>
         </div>
+
+        <div class="stat-title">
+            Disetujui
+        </div>
+
+        <div class="stat-number">
+            {{ $disetujui }}
+        </div>
+
+    </div>
+
+</div>
 
         <!-- DITOLAK -->
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
 
-            <div class="dashboard-card">
+    <div class="stat-card">
 
-                <div class="d-flex justify-content-between align-items-start">
-
-                    <div>
-
-                        <small>Ditolak</small>
-
-                        <h2>{{ $ditolak }}</h2>
-
-                    </div>
-
-                    <div class="card-icon bg-danger-soft">
-
-                        <i class="bi bi-x-circle"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div class="stat-icon bg-danger-soft">
+            <i class="bi bi-x-circle"></i>
         </div>
+
+        <div class="stat-title">
+            Ditolak
+        </div>
+
+        <div class="stat-number">
+            {{ $ditolak }}
+        </div>
+
+    </div>
+
+</div>
 
         <!-- MENUNGGU -->
-        <div class="col-md-3">
+        <div class="col-6 col-md-3">
 
-            <div class="dashboard-card">
+    <div class="stat-card">
 
-                <div class="d-flex justify-content-between align-items-start">
-
-                    <div>
-
-                        <small>Menunggu</small>
-
-                        <h2>{{ $menunggu }}</h2>
-
-                    </div>
-
-                    <div class="card-icon bg-warning-soft">
-
-                        <i class="bi bi-hourglass-split"></i>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div class="stat-icon bg-warning-soft">
+            <i class="bi bi-hourglass-split"></i>
         </div>
 
+        <div class="stat-title">
+            Menunggu
+        </div>
+
+        <div class="stat-number">
+            {{ $menunggu }}
+        </div>
+
+    </div>
+
+</div>
     </div>
 
    <!-- CONTENT -->
@@ -390,19 +318,19 @@
 
                         @if($item->status == 'disetujui')
 
-                            <span class="status-badge status-success">
+                            <span class="badge-modern badge-success">
                                 Disetujui
                             </span>
 
                         @elseif($item->status == 'ditolak')
 
-                            <span class="status-badge status-danger">
+                            <span class="badge-modern badge-danger">
                                 Ditolak
                             </span>
 
                         @else
 
-                            <span class="status-badge status-warning">
+                            <span class="badge-modern badge-warning">
                                 Pending
                             </span>
 
@@ -424,6 +352,7 @@
 
         </div>
 
+        <!-- PENGUMUMAN -->
         <!-- PENGUMUMAN -->
         <div class="content-card">
 

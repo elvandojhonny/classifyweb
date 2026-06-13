@@ -1,159 +1,227 @@
 @extends('layouts.user')
 
+@section('page-title', 'Ajukan Peminjaman')
+
 @section('content')
 
 <style>
 
-    .page-topbar{
-        background: white;
-        border-radius: 22px;
-        padding: 22px 26px;
-        margin-bottom: 28px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    }
+.section-header{
+    margin-bottom:24px;
+}
 
-    .page-topbar h3{
-        margin: 0;
-        font-weight: 700;
-        color: #0f172a;
-    }
+.section-header h4{
+    font-weight:700;
+    color:#0f172a;
+    margin-bottom:4px;
+}
 
-    .page-topbar p{
-        margin: 4px 0 0;
-        color: #64748b;
-        font-size: 14px;
-    }
+.section-header p{
+    color:#64748b;
+    margin:0;
+}
 
-    .profile-user{
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: #4f46e5;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-    }
+/* CARD */
+
+.form-card{
+    background:white;
+    border-radius:24px;
+    padding:24px;
+    border:1px solid rgba(0,0,0,.04);
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.kelas-info{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:24px;
+}
+
+.kelas-header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.kelas-icon{
+    width:56px;
+    height:56px;
+    border-radius:16px;
+    background:rgba(79,70,229,.12);
+    color:#4f46e5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    flex-shrink:0;
+}
+
+.kelas-title{
+    font-size:18px;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.kelas-subtitle{
+    color:#64748b;
+    font-size:13px;
+}
+
+/* FORM */
+
+.form-label{
+    font-weight:600;
+    color:#334155;
+    margin-bottom:8px;
+}
+
+.form-control{
+    border-radius:14px;
+    min-height:48px;
+    border:1px solid #dbeafe;
+    box-shadow:none !important;
+}
+
+.form-control:focus{
+    border-color:#4f46e5;
+}
+
+textarea.form-control{
+    min-height:130px;
+}
+
+/* BUTTON */
+
+.submit-btn{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:14px;
+    background:#4f46e5;
+    color:white;
+    font-weight:600;
+    transition:.3s;
+}
+
+.submit-btn:hover{
+    background:#4338ca;
+}
+
+/* ALERT */
+
+.success-alert{
+    background:rgba(34,197,94,.12);
+    color:#16a34a;
+    padding:14px 18px;
+    border-radius:14px;
+    margin-bottom:20px;
+}
+
+.error-alert{
+    background:rgba(239,68,68,.12);
+    color:#dc2626;
+    padding:14px 18px;
+    border-radius:14px;
+    margin-bottom:20px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
 
     .form-card{
-        background: white;
-        border-radius: 24px;
-        padding: 32px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-        border: 1px solid rgba(0,0,0,0.04);
+        padding:16px;
+        border-radius:18px;
     }
 
     .kelas-info{
-        background: #f8fafc;
-        border-radius: 18px;
-        padding: 18px;
-        margin-bottom: 28px;
-        border: 1px solid #e2e8f0;
+        padding:14px;
+        border-radius:14px;
     }
 
-    .kelas-info h5{
-        margin: 0;
-        font-weight: 700;
-        color: #0f172a;
+    .kelas-icon{
+        width:44px;
+        height:44px;
+        font-size:18px;
+        border-radius:12px;
     }
 
-    .kelas-info small{
-        color: #64748b;
+    .kelas-title{
+        font-size:15px;
     }
 
-    .form-label{
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #334155;
+    .kelas-subtitle{
+        font-size:11px;
     }
 
-    .form-control{
-        border-radius: 14px;
-        padding: 12px 16px;
-        border: 1px solid #dbeafe;
-        box-shadow: none !important;
+    .section-header h4{
+        font-size:20px;
     }
 
-    .form-control:focus{
-        border-color: #4f46e5;
+    .section-header p{
+        font-size:13px;
     }
 
     .submit-btn{
-        width: 100%;
-        border: none;
-        border-radius: 16px;
-        padding: 14px;
-        background: #4f46e5;
-        color: white;
-        font-weight: 600;
-        transition: 0.3s ease;
+        padding:12px;
+        font-size:14px;
     }
-
-    .submit-btn:hover{
-        background: #4338ca;
-    }
-
-    .success-alert{
-        background: rgba(34,197,94,0.12);
-        color: #16a34a;
-        padding: 14px 18px;
-        border-radius: 14px;
-        margin-bottom: 22px;
-        font-weight: 500;
-    }
+}
 
 </style>
 
-<!-- TOPBAR -->
-<div class="page-topbar d-flex justify-content-between align-items-center">
+<!-- HEADER -->
 
-    <div>
+<div class="section-header">
 
-        <h3>Ajukan Peminjaman</h3>
+    <h4>Ajukan Peminjaman</h4>
 
-        <p>
-            Isi data peminjaman ruangan dengan lengkap
-        </p>
-
-    </div>
-
-    <div class="d-flex align-items-center gap-3">
-
-        <div class="text-end">
-            <strong>{{ auth()->user()->name }}</strong><br>
-            <small class="text-muted">User</small>
-        </div>
-
-        <div class="profile-user">
-            {{ strtoupper(substr(auth()->user()->name,0,1)) }}
-        </div>
-
-    </div>
+    <p>
+        Isi data peminjaman ruangan dengan lengkap
+    </p>
 
 </div>
 
-<!-- FORM -->
 <div class="row justify-content-center">
 
-    <div class="col-md-8">
+    <div class="col-lg-8">
 
         <div class="form-card">
 
             <!-- INFO KELAS -->
+
             <div class="kelas-info">
 
-                <h5>{{ $kelas->nama_kelas }}</h5>
+                <div class="kelas-header">
 
-                <small>
-                    {{ $kelas->gedung->nama_gedung }}
-                    •
-                    {{ $kelas->gedung->fakultas->nama_fakultas }}
-                </small>
+                    <div class="kelas-icon">
+                        <i class="bi bi-door-open"></i>
+                    </div>
+
+                    <div>
+
+                        <div class="kelas-title">
+                            {{ $kelas->nama_kelas }}
+                        </div>
+
+                        <div class="kelas-subtitle">
+
+                            {{ $kelas->gedung->nama_gedung }}
+                            •
+                            {{ $kelas->gedung->fakultas->nama_fakultas }}
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
             <!-- ALERT -->
+
             @if(session('success'))
 
                 <div class="success-alert">
@@ -162,7 +230,16 @@
 
             @endif
 
+            @if($errors->any())
+
+                <div class="error-alert">
+                    {{ $errors->first() }}
+                </div>
+
+            @endif
+
             <!-- FORM -->
+
             <form action="{{ route('peminjaman.store') }}"
                   method="POST">
 
@@ -172,11 +249,10 @@
                        name="kelas_id"
                        value="{{ $kelas->id }}">
 
-                <!-- TANGGAL -->
                 <div class="mb-4">
 
                     <label class="form-label">
-                        Tanggal
+                        Tanggal Peminjaman
                     </label>
 
                     <input type="date"
@@ -186,7 +262,6 @@
 
                 </div>
 
-                <!-- JAM -->
                 <div class="row">
 
                     <div class="col-md-6 mb-4">
@@ -217,7 +292,6 @@
 
                 </div>
 
-                <!-- KEPERLUAN -->
                 <div class="mb-4">
 
                     <label class="form-label">
@@ -225,17 +299,16 @@
                     </label>
 
                     <textarea name="keperluan"
-                              rows="4"
                               class="form-control"
-                              placeholder="Mata kuliah, Program studi, Seminar, dll"
+                              placeholder="Contoh: Perkuliahan, Seminar, Rapat, Praktikum, dan lain-lain"
                               required></textarea>
 
                 </div>
 
-                <!-- BUTTON -->
                 <button type="submit"
                         class="submit-btn">
 
+                    <i class="bi bi-send me-2"></i>
                     Kirim Pengajuan
 
                 </button>

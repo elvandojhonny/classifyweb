@@ -1,361 +1,362 @@
 @extends('layouts.admin')
 
 @section('title','Edit Akun')
-@section('navbar','Edit Akun')
+@section('page-title','Edit Akun')
 
 @section('content')
 
 <style>
 
     .form-card{
-        background: white;
-        border-radius: 28px;
-        padding: 32px;
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        background:#fff;
+        border-radius:24px;
+        padding:24px;
+        border:1px solid rgba(0,0,0,.05);
+        box-shadow:0 4px 14px rgba(0,0,0,.05);
     }
 
     .form-title{
-        font-size: 28px;
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 6px;
+        font-size:22px;
+        font-weight:700;
+        color:#0f172a;
+        margin-bottom:4px;
     }
 
     .form-subtitle{
-        color: #64748b;
-        margin-bottom: 30px;
+        font-size:14px;
+        color:#64748b;
+        margin-bottom:24px;
     }
 
     .form-label{
-        font-weight: 600;
-        color: #334155;
-        margin-bottom: 10px;
+        font-size:13px;
+        font-weight:600;
+        color:#334155;
+        margin-bottom:8px;
     }
 
     .form-control,
     .form-select{
-        height: 56px;
-        border-radius: 16px;
-        border: 1px solid #e2e8f0;
-        padding-left: 18px;
-        transition: 0.3s;
+        height:48px;
+        border-radius:14px;
+        border:1px solid #e2e8f0;
+        padding:0 14px;
+        font-size:14px;
+        box-shadow:none !important;
+        transition:.3s;
     }
 
     .form-control:focus,
     .form-select:focus{
-        box-shadow: none;
-        border-color: #4f46e5;
+        border-color:#4f46e5;
     }
 
     .form-hint{
-        color: #64748b;
-        font-size: 13px;
-        margin-top: 8px;
+        font-size:12px;
+        color:#64748b;
+        margin-top:6px;
     }
 
     .btn-modern{
-        border: none;
-        border-radius: 16px;
-        padding: 14px 26px;
-        font-weight: 600;
-        transition: 0.3s;
+        border:none;
+        border-radius:14px;
+        padding:11px 18px;
+        font-size:14px;
+        font-weight:600;
+        transition:.3s;
     }
 
     .btn-primary-modern{
-        background: #4f46e5;
-        color: white;
+        background:#4f46e5;
+        color:white;
     }
 
     .btn-primary-modern:hover{
-        background: #4338ca;
-        transform: translateY(-2px);
+        background:#4338ca;
+        color:white;
     }
 
     .btn-secondary-modern{
-        background: #e2e8f0;
-        color: #334155;
-        text-decoration: none;
+        background:#f1f5f9;
+        color:#334155;
+        text-decoration:none;
     }
 
     .btn-secondary-modern:hover{
-        background: #cbd5e1;
-        color: #0f172a;
+        background:#e2e8f0;
+        color:#0f172a;
+    }
+
+    @media(max-width:768px){
+
+        .form-card{
+            padding:16px;
+            border-radius:18px;
+        }
+
+        .form-title{
+            font-size:18px;
+        }
+
+        .form-subtitle{
+            font-size:12px;
+            margin-bottom:18px;
+        }
+
+        .form-label{
+            font-size:12px;
+        }
+
+        .form-control,
+        .form-select{
+            height:44px;
+            font-size:13px;
+        }
+
+        .btn-modern{
+            width:100%;
+            text-align:center;
+            justify-content:center;
+        }
+
+        .action-buttons{
+            flex-direction:column;
+        }
+
     }
 
 </style>
 
-<div class="form-card">
+<div class="row justify-content-center">
 
-    <!-- HEADER -->
-    <div class="mb-4">
+    <div class="col-lg-10">
 
-        <div class="form-title">
-            Edit Data Akun
-        </div>
+        <div class="form-card">
 
-        <div class="form-subtitle">
-            Perbarui informasi akun pengguna sistem
-        </div>
+            <div class="form-title">
+                Edit Data Akun
+            </div>
 
-    </div>
+            <div class="form-subtitle">
+                Perbarui informasi akun pengguna sistem
+            </div>
 
-    <!-- FORM -->
-    <form method="POST"
-          action="{{ route('users.update', $user->id) }}">
+            <form method="POST"
+                  action="{{ route('users.update', $user->id) }}">
 
-        @csrf
-        @method('PUT')
+                @csrf
+                @method('PUT')
 
-        <div class="row">
+                <div class="row">
 
-            <!-- NAMA -->
-            <div class="col-md-6 mb-4">
+                    <!-- NAMA -->
+                    <div class="col-md-6 mb-3">
 
-                <label class="form-label">
+                        <label class="form-label">
+                            Nama Lengkap
+                        </label>
 
-                    Nama Lengkap
+                        <input type="text"
+                               name="name"
+                               value="{{ old('name', $user->name) }}"
+                               class="form-control @error('name') is-invalid @enderror"
+                               placeholder="Masukkan nama lengkap">
 
-                </label>
-
-                <input type="text"
-                       name="name"
-                       value="{{ old('name', $user->name) }}"
-                       class="form-control @error('name') is-invalid @enderror"
-                       placeholder="Masukkan nama lengkap">
-
-                @error('name')
-
-                    <div class="invalid-feedback">
-
-                        {{ $message }}
+                        @error('name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
                     </div>
 
-                @enderror
+                    <!-- EMAIL -->
+                    <div class="col-md-6 mb-3">
 
-            </div>
+                        <label class="form-label">
+                            Email
+                        </label>
 
-            <!-- EMAIL -->
-            <div class="col-md-6 mb-4">
+                        <input type="email"
+                               name="email"
+                               value="{{ old('email', $user->email) }}"
+                               class="form-control @error('email') is-invalid @enderror"
+                               placeholder="Masukkan email">
 
-                <label class="form-label">
-
-                    Email / Username
-
-                </label>
-
-                <input type="email"
-                       name="email"
-                       value="{{ old('email', $user->email) }}"
-                       class="form-control @error('email') is-invalid @enderror"
-                       placeholder="contoh@email.com">
-
-                @error('email')
-
-                    <div class="invalid-feedback">
-
-                        {{ $message }}
+                        @error('email')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
                     </div>
 
-                @enderror
+                    <!-- PASSWORD -->
+                    <div class="col-md-6 mb-3">
 
-            </div>
+                        <label class="form-label">
+                            Password Baru
+                        </label>
 
-            <!-- PASSWORD -->
-            <div class="col-md-6 mb-4">
+                        <input type="password"
+                               name="password"
+                               class="form-control @error('password') is-invalid @enderror"
+                               placeholder="Kosongkan jika tidak diubah">
 
-                <label class="form-label">
+                        <div class="form-hint">
+                            Kosongkan jika tidak ingin mengubah password
+                        </div>
 
-                    Password Baru
+                        @error('password')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
 
-                </label>
+                    </div>
 
-                <input type="password"
-                       name="password"
-                       class="form-control @error('password') is-invalid @enderror"
-                       placeholder="Kosongkan jika tidak diubah">
+                    <!-- NIM -->
+                    <div class="col-md-6 mb-3">
 
-                <div class="form-hint">
+                        <label class="form-label">
+                            NIM
+                        </label>
 
-                    Kosongkan jika tidak ingin mengubah password
+                        <input type="text"
+                               name="nim"
+                               value="{{ old('nim', $user->nim) }}"
+                               class="form-control @error('nim') is-invalid @enderror"
+                               placeholder="Masukkan NIM">
+
+                        @error('nim')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                    </div>
+
+                    <!-- PRODI -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Program Studi
+                        </label>
+
+                        <input type="text"
+                               name="prodi"
+                               value="{{ old('prodi', $user->prodi) }}"
+                               class="form-control @error('prodi') is-invalid @enderror"
+                               placeholder="Contoh: Teknik Informatika">
+
+                        @error('prodi')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                    </div>
+
+                    <!-- FAKULTAS -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Fakultas
+                        </label>
+
+                        <select name="fakultas_id"
+                                class="form-select @error('fakultas_id') is-invalid @enderror">
+
+                            <option value="">
+                                -- Pilih Fakultas --
+                            </option>
+
+                            @foreach($fakultas as $f)
+
+                                <option value="{{ $f->id }}"
+                                    {{ old('fakultas_id', $user->fakultas_id) == $f->id ? 'selected' : '' }}>
+
+                                    {{ $f->nama_fakultas }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        @error('fakultas_id')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                    </div>
+
+                    <!-- ROLE -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Role Akun
+                        </label>
+
+                        <select name="role"
+                                class="form-select @error('role') is-invalid @enderror">
+
+                            <option value="user"
+                                {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>
+                                User
+                            </option>
+
+                            <option value="admin"
+                                {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>
+                                Admin Fakultas
+                            </option>
+
+                            @if(auth()->user()->role == 'superadmin')
+
+                                <option value="superadmin"
+                                    {{ old('role', $user->role) == 'superadmin' ? 'selected' : '' }}>
+                                    Super Admin
+                                </option>
+
+                            @endif
+
+                        </select>
+
+                        @error('role')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+
+                    </div>
 
                 </div>
 
-                @error('password')
+                <div class="d-flex gap-2 mt-3 action-buttons">
 
-                    <div class="invalid-feedback">
+                    <button class="btn-modern btn-primary-modern">
 
-                        {{ $message }}
+                        <i class="bi bi-check-lg me-1"></i>
+                        Update Akun
 
-                    </div>
+                    </button>
 
-                @enderror
+                    <a href="{{ route('users.index') }}"
+                       class="btn-modern btn-secondary-modern">
 
-            </div>
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Kembali
 
-            <!-- NIM -->
-            <div class="col-md-6 mb-4">
+                    </a>
 
-                <label class="form-label">
+                </div>
 
-                    NIM
-
-                </label>
-
-                <input type="text"
-                       name="nim"
-                       value="{{ old('nim', $user->nim) }}"
-                       class="form-control @error('nim') is-invalid @enderror"
-                       placeholder="Masukkan NIM">
-
-                @error('nim')
-
-                    <div class="invalid-feedback">
-
-                        {{ $message }}
-
-                    </div>
-
-                @enderror
-
-            </div>
-
-            <!-- PRODI -->
-            <div class="col-md-6 mb-4">
-
-                <label class="form-label">
-
-                    Program Studi
-
-                </label>
-
-                <input type="text"
-                       name="prodi"
-                       value="{{ old('prodi', $user->prodi) }}"
-                       class="form-control @error('prodi') is-invalid @enderror"
-                       placeholder="Contoh: Teknik Informatika">
-
-                @error('prodi')
-
-                    <div class="invalid-feedback">
-
-                        {{ $message }}
-
-                    </div>
-
-                @enderror
-
-            </div>
-
-            <!-- FAKULTAS -->
-<div class="col-md-6 mb-4">
-
-    <label class="form-label">
-
-        Fakultas
-
-    </label>
-
-    <select name="fakultas_id"
-            class="form-select @error('fakultas_id') is-invalid @enderror">
-
-        <option value="">
-        -- Pilih Fakultas --
-        </option>
-
-        @foreach($fakultas as $f)
-
-            <option value="{{ $f->id }}"
-                {{ old('fakultas_id', $user->fakultas_id) == $f->id ? 'selected' : '' }}>
-
-                {{ $f->nama_fakultas }}
-
-            </option>
-
-        @endforeach
-
-    </select>
-
-    @error('fakultas_id')
-
-        <div class="invalid-feedback">
-
-            {{ $message }}
+            </form>
 
         </div>
 
-    @enderror
-
-</div>
-
-            <!-- ROLE -->
-            <div class="col-md-6 mb-4">
-
-                <label class="form-label">
-
-                    Role Akun
-
-                </label>
-
-                <select name="role"
-                        class="form-select @error('role') is-invalid @enderror">
-
-                    <option value="user"
-                        {{ old('role', $user->role) == 'user' ? 'selected' : '' }}>
-                        User
-                    </option>
-
-                    <option value="admin"
-                        {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>
-                        Admin Fakultas
-                    </option>
-
-                    @if(auth()->user()->role == 'superadmin')
-
-                        <option value="superadmin"
-                            {{ old('role', $user->role) == 'superadmin' ? 'selected' : '' }}>
-                            Super Admin
-                        </option>
-
-                    @endif
-
-                </select>
-
-                @error('role')
-
-                    <div class="invalid-feedback">
-
-                        {{ $message }}
-
-                    </div>
-
-                @enderror
-
-            </div>
-
-        </div>
-
-        <!-- BUTTON -->
-        <div class="d-flex gap-3">
-
-            <button class="btn-modern btn-primary-modern">
-
-                Update Akun
-
-            </button>
-
-            <a href="{{ route('users.index') }}"
-               class="btn-modern btn-secondary-modern">
-
-                Kembali
-
-            </a>
-
-        </div>
-
-    </form>
+    </div>
 
 </div>
 

@@ -1,100 +1,111 @@
 @extends('layouts.admin')
 
-@section('title','Edit Gedung')
-@section('navbar','Edit Gedung')
+@section('title', 'Edit Gedung')
+@section('page-title', 'Edit Gedung')
 
 @section('content')
 
 <style>
 
-    .form-card{
-        background: white;
-        border-radius: 28px;
-        padding: 32px;
-        border: 1px solid rgba(0,0,0,0.04);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    .page-header{
+        margin-bottom: 30px;
     }
 
-    .form-title{
-        font-size: 28px;
+    .page-header h4{
         font-weight: 700;
         color: #0f172a;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
     }
 
-    .form-subtitle{
+    .page-header p{
         color: #64748b;
-        margin-bottom: 30px;
+        margin: 0;
+    }
+
+    .form-card{
+        background: #fff;
+        border-radius: 24px;
+        padding: 30px;
+        border: 1px solid rgba(0,0,0,.04);
+        box-shadow: 0 8px 24px rgba(15,23,42,.06);
     }
 
     .form-label{
         font-weight: 600;
         color: #334155;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     .form-control,
     .form-select{
-        height: 56px;
-        border-radius: 16px;
+        border-radius: 14px;
         border: 1px solid #e2e8f0;
-        padding-left: 18px;
-        transition: 0.3s;
+        padding: 12px 16px;
+        min-height: 52px;
+        box-shadow: none !important;
+        transition: .3s ease;
     }
 
     .form-control:focus,
     .form-select:focus{
-        box-shadow: none;
         border-color: #4f46e5;
     }
 
-    .btn-modern{
-        border: none;
-        border-radius: 16px;
-        padding: 14px 26px;
-        font-weight: 600;
-        transition: 0.3s;
+    .invalid-feedback{
+        display: block;
     }
 
-    .btn-primary-modern{
+    .action-group{
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .btn-update{
+        border: none;
         background: #4f46e5;
         color: white;
+        padding: 12px 24px;
+        border-radius: 14px;
+        font-weight: 600;
+        transition: .3s ease;
     }
 
-    .btn-primary-modern:hover{
+    .btn-update:hover{
         background: #4338ca;
-        transform: translateY(-2px);
     }
 
-    .btn-secondary-modern{
-        background: #e2e8f0;
-        color: #334155;
+    .btn-back{
         text-decoration: none;
+        background: #f1f5f9;
+        color: #334155;
+        padding: 12px 24px;
+        border-radius: 14px;
+        font-weight: 600;
+        transition: .3s ease;
     }
 
-    .btn-secondary-modern:hover{
-        background: #cbd5e1;
+    .btn-back:hover{
+        background: #e2e8f0;
         color: #0f172a;
     }
 
 </style>
 
+<!-- HEADER -->
+<div class="page-header">
+
+    <h4>Edit Gedung</h4>
+
+    <p>
+        Perbarui informasi gedung kampus
+    </p>
+
+</div>
+
+<!-- FORM -->
 <div class="form-card">
 
-    <!-- HEADER -->
-    <div class="mb-4">
-
-        <div class="form-title">
-            Edit Gedung
-        </div>
-
-        <div class="form-subtitle">
-            Perbarui data gedung di dalam sistem
-        </div>
-
-    </div>
-
-    <!-- FORM -->
     <form method="POST"
           action="{{ route('gedung.update', $gedung->id) }}">
 
@@ -105,18 +116,20 @@
         <div class="mb-4">
 
             <label class="form-label">
-
                 Fakultas
-
             </label>
 
             <select name="fakultas_id"
                     class="form-select @error('fakultas_id') is-invalid @enderror">
 
+                <option value="">
+                    -- Pilih Fakultas --
+                </option>
+
                 @foreach($fakultas as $f)
 
                     <option value="{{ $f->id }}"
-                        {{ $f->id == old('fakultas_id', $gedung->fakultas_id) ? 'selected' : '' }}>
+                        {{ old('fakultas_id', $gedung->fakultas_id) == $f->id ? 'selected' : '' }}>
 
                         {{ $f->nama_fakultas }}
 
@@ -127,13 +140,9 @@
             </select>
 
             @error('fakultas_id')
-
                 <div class="invalid-feedback">
-
                     {{ $message }}
-
                 </div>
-
             @enderror
 
         </div>
@@ -142,40 +151,35 @@
         <div class="mb-4">
 
             <label class="form-label">
-
                 Nama Gedung
-
             </label>
 
             <input type="text"
                    name="nama_gedung"
                    value="{{ old('nama_gedung', $gedung->nama_gedung) }}"
                    class="form-control @error('nama_gedung') is-invalid @enderror"
-                   placeholder="Contoh: Gedung A">
+                   placeholder="Masukkan nama gedung">
 
             @error('nama_gedung')
-
                 <div class="invalid-feedback">
-
                     {{ $message }}
-
                 </div>
-
             @enderror
 
         </div>
 
         <!-- BUTTON -->
-        <div class="d-flex gap-3">
+        <div class="action-group">
 
-            <button class="btn-modern btn-primary-modern">
+            <button type="submit"
+                    class="btn-update">
 
                 Update Gedung
 
             </button>
 
             <a href="{{ route('gedung.index') }}"
-               class="btn-modern btn-secondary-modern">
+               class="btn-back">
 
                 Kembali
 

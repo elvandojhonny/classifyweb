@@ -125,11 +125,159 @@
 
         }
 
+        /* =========================
+    MOBILE BUTTON
+========================= */
+
+.mobile-menu-btn{
+    position:fixed;
+    top:15px;
+    left:15px;
+    z-index:1200;
+    width:52px;
+    height:52px;
+    border:none;
+    border-radius:16px;
+    background:#4f46e5;
+    color:white;
+    font-size:24px;
+    display:none;
+    box-shadow:0 8px 24px rgba(79,70,229,.35);
+    transition:.3s ease;
+}
+
+/* =========================
+    OVERLAY
+========================= */
+
+.sidebar-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    z-index:998;
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+}
+
+.sidebar-overlay.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* =========================
+    MOBILE
+========================= */
+
+@media (max-width:992px){
+
+    .mobile-menu-btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s ease;
+        width:280px;
+        height:100vh;
+        position:fixed;
+        left:0;
+        top:0;
+        z-index:999;
+        overflow-y:auto;
+    }
+
+    .sidebar.show{
+        transform:translateX(0);
+    }
+
+    .main-content{
+        margin-left:0 !important;
+        padding:80px 18px 20px;
+    }
+}
+
+    .page-topbar{
+    background:white;
+    border-radius:24px;
+    padding:24px 28px;
+    margin-bottom:28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.header-left h3{
+    margin:0;
+    font-size:32px;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.header-left p{
+    margin:6px 0 0;
+    color:#64748b;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.profile-user{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:#4f46e5;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:18px;
+}
+
+.profile-info strong{
+    display:block;
+    color:#0f172a;
+}
+
+.profile-info small{
+    color:#64748b;
+}
+
+@media(max-width:768px){
+
+    .page-topbar{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .header-left h3{
+        font-size:26px;
+    }
+}
+
     </style>
 
 </head>
 
 <body>
+
+    <button id="mobileToggle"
+        class="mobile-menu-btn d-lg-none"
+        type="button">
+
+    <i class="bi bi-list"></i>
+
+</button>
+
+<div class="sidebar-overlay"></div>
 
 <div class="sidebar">
 
@@ -186,9 +334,104 @@
 <!-- CONTENT -->
 <div class="main-content">
 
+    <div class="page-topbar">
+
+        <div class="header-left">
+
+            <h3>
+                @yield('page-title', 'Dashboard')
+            </h3>
+
+            <p>
+                Sistem Peminjaman Ruangan Kampus
+            </p>
+
+        </div>
+
+        <div class="header-right">
+
+            <div class="profile-user">
+                {{ strtoupper(substr(auth()->user()->name,0,1)) }}
+            </div>
+
+            <div class="profile-info">
+
+                <strong>
+                    {{ auth()->user()->name }}
+                </strong>
+
+                <small>
+                    User
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
     @yield('content')
 
 </div>
+
+<script>
+
+const sidebar = document.querySelector('.sidebar');
+const overlay = document.querySelector('.sidebar-overlay');
+const mobileToggle = document.getElementById('mobileToggle');
+
+function openSidebar(){
+
+    sidebar.classList.add('show');
+    overlay.classList.add('show');
+
+    if(window.innerWidth <= 992){
+        mobileToggle.style.left = '220px';
+    }
+}
+
+function closeSidebar(){
+
+    sidebar.classList.remove('show');
+    overlay.classList.remove('show');
+
+    mobileToggle.style.left = '15px';
+}
+
+function toggleSidebar(){
+
+    if(sidebar.classList.contains('show')){
+        closeSidebar();
+    }else{
+        openSidebar();
+    }
+}
+
+mobileToggle.addEventListener('click', toggleSidebar);
+
+overlay.addEventListener('click', closeSidebar);
+
+document.querySelectorAll('.sidebar a').forEach(link => {
+
+    link.addEventListener('click', () => {
+
+        if(window.innerWidth <= 992){
+            closeSidebar();
+        }
+
+    });
+
+});
+
+window.addEventListener('resize', () => {
+
+    if(window.innerWidth > 992){
+        closeSidebar();
+    }
+
+});
+
+</script>
 
 </body>
 </html>
